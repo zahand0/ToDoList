@@ -16,8 +16,8 @@ class TodoListFragment: Fragment() {
           container: ViewGroup?,
           savedInstanceState: Bundle?
      ): View? {
-          val fragmnetBinding = FragmentTodoListBinding.inflate(inflater, container, false)
-          binding = fragmnetBinding
-          return fragmnetBinding.root
+          val fragmentBinding = FragmentTodoListBinding.inflate(inflater, container, false)
+          binding = fragmentBinding
+          return fragmentBinding.root
      }
 }
