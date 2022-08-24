@@ -25,5 +25,14 @@
         <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="Widget.App.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Switch</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Switch" parent="">
+        <item name="colorOnSurface">@color/back_primary</item>
+        <item name="colorSecondary">@color/blue</item>
+        <item name="colorSurface">@color/label_secondary</item>
+    </style>
 
 </resources>
