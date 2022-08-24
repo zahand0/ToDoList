@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.ToDoList" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/back_primary</item>
+        <item name="colorPrimaryVariant">@color/back_elevated</item>
+        <item name="colorOnPrimary">@color/label_primary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/back_secondary</item>
+        <item name="colorSecondaryVariant">@color/back_elevated</item>
+        <item name="colorOnSecondary">@color/label_secondary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_close</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+
+        <item name="android:actionMenuTextColor">@color/blue</item>
+        <item name="android:textSize">@dimen/primaryTextSize</item>
+        <item name="android:background">@color/back_primary</item>
+
+    </style>
+
+
+</resources>

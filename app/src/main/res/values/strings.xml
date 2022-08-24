@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ToDo List</string>
+    <string name="my_tasks">My tasks</string>
+    <string name="add_task">Add task</string>
+    <string name="save">Save</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tasks_done">Tasks is done - %d</string>
+    <string name="task_description_hint">What you need to do…</string>
+    <string name="priority_label">Priority</string>
+    <string name="task_info">Task info</string>
+    <string name="delete">Delete</string>
+    <string name="show_done_tasks">Show done tasks</string>
+</resources>
