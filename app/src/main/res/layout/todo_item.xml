@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="48dp"
-    android:background="@color/back_secondary"
+
     >
 
     <CheckBox
@@ -28,7 +28,6 @@
         android:layout_toEndOf="@id/task_status"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textStyle="bold"
-        android:visibility="gone"
         tools:text="!!" />
 
     <TextView
