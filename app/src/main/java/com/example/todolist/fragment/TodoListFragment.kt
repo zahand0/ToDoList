@@ -49,7 +49,16 @@ class TodoListFragment: Fragment() {
           }
 
           binding?.showDoneTasks?.setOnClickListener {
-               Toast.makeText(requireContext(), "Hide done tasks",Toast.LENGTH_SHORT).show()
+               Toast.makeText(requireContext(), "Hide done tasks", Toast.LENGTH_SHORT).show()
+          }
+
+//          binding?.doneTasks?.visibility = View.INVISIBLE
+          binding?.appBarLayout?.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+
+               binding?.doneTasks?.alpha = (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
+
           }
      }
+
+
 }
