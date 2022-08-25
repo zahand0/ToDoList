@@ -34,6 +34,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) : ListAdapt
             binding.taskStatus.isChecked = item.isDone
             binding.taskImportance.text = when (item.priority) {
                 TaskPriority.URGENT -> "!!"
+                TaskPriority.LOW -> "↓"
                 else -> ""
             }
         }
