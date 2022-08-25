@@ -48,41 +48,66 @@
     <!--        app:tint="@color/blue" />-->
 
 
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--        android:layout_width="match_parent"-->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        app:elevation="20dp"
+        android:layout_height="128dp"
 
-<!--        android:layout_height="128dp"-->
-<!--        app:liftOnScroll="true">-->
+        app:liftOnScroll="true">
 
-<!--        <com.google.android.material.appbar.CollapsingToolbarLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            app:contentScrim="?attr/colorPrimary"-->
-<!--            app:expandedTitleMarginBottom="28dp"-->
-<!--            app:expandedTitleMarginStart="72dp"-->
-<!--            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"-->
-<!--            app:statusBarScrim="?attr/colorPrimaryVariant"-->
-<!--            app:expandedTitleTextAppearance="@style/TextAppearance.App.CollapsingToolbar.Expanded"-->
-<!--            app:collapsedTitleTextAppearance="@style/TextAppearance.App.CollapsingToolbar.Collapsed">-->
 
-<!--            <com.google.android.material.appbar.MaterialToolbar-->
-<!--                android:id="@+id/topAppBar"-->
-<!--                style="@style/Widget.MaterialComponents.Toolbar.Primary"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="?attr/actionBarSize"-->
-<!--                android:elevation="0dp"-->
-<!--                app:layout_collapseMode="pin"-->
-<!--                app:layout_scrollFlags="scroll|enterAlways|snap"-->
-<!--                app:menu="@menu/top_app_bar"-->
-<!--                app:title="@string/my_tasks" />-->
-<!--        </com.google.android.material.appbar.CollapsingToolbarLayout>-->
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:collapsedTitleTextAppearance="@style/TextAppearance.App.CollapsingToolbar.Collapsed"
+                app:contentScrim="?attr/colorPrimary"
+
+                app:expandedTitleMarginBottom="28dp"
+                app:expandedTitleMarginStart="72dp"
+                app:expandedTitleTextAppearance="@style/TextAppearance.App.CollapsingToolbar.Expanded"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:statusBarScrim="?attr/colorPrimaryVariant">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/topAppBar"
+                    style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:elevation="0dp"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways|snap"
+
+                    app:menu="@menu/top_app_bar"
+                    app:title="@string/my_tasks" />
+
+
+
+
+                <ImageButton
+                    android:id="@+id/show_done_tasks"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_eye"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:backgroundTint="#00000000"
+                    android:layout_gravity="bottom|end" />
+
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
         app:cardElevation="4dp">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -90,9 +115,8 @@
         android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/done_tasks"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
         tools:itemCount="2"
         tools:listitem="@layout/todo_item" />
 
