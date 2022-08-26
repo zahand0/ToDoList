@@ -4,55 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.TodoListFragment"
     android:background="@color/back_primary"
-    >
-
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/article"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="60dp"-->
-    <!--        android:layout_marginTop="70dp"-->
-    <!--        android:paddingBottom="8dp"-->
-    <!--        android:text="@string/my_tasks"-->
-    <!--        android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
-    <!--        android:textSize="40sp"-->
-    <!--        android:textStyle="bold"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/done_tasks"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="60dp"-->
-    <!--        android:paddingBottom="8dp"-->
-    <!--        android:text="@string/tasks_done"-->
-    <!--        android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
-    <!--        android:textColor="@color/label_tertiary"-->
-    <!--        android:textSize="20sp"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/article"-->
-    <!--        tools:text="Tasks is done - 5" />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/info"-->
-    <!--        android:layout_width="28dp"-->
-    <!--        android:layout_height="28dp"-->
-    <!--        android:layout_marginEnd="28dp"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/article"-->
-    <!--        app:srcCompat="@drawable/ic_eye"-->
-    <!--        app:tint="@color/blue" />-->
+    tools:context=".fragment.TodoListFragment">
 
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        app:elevation="20dp"
         android:layout_height="160dp"
+        app:elevation="20dp"
 
         app:liftOnScroll="true">
 
@@ -66,9 +26,9 @@
 
             app:expandedTitleMarginBottom="52dp"
             app:expandedTitleMarginStart="72dp"
-app:expandedTitleTextColor="@color/label_primary"
-
             app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Display1"
+
+            app:expandedTitleTextColor="@color/label_primary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:statusBarScrim="?attr/colorPrimaryVariant">
 
@@ -92,10 +52,10 @@ app:expandedTitleTextColor="@color/label_primary"
                 android:layout_marginStart="72dp"
                 android:layout_marginBottom="20dp"
                 android:text="@string/tasks_done"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.3"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/label_tertiary"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.3"
 
                 tools:text="Tasks is done - 5" />
 
@@ -113,7 +73,6 @@ app:expandedTitleTextColor="@color/label_primary"
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
 
-
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -121,20 +80,19 @@ app:expandedTitleTextColor="@color/label_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:cardElevation="4dp"
 
-        app:cardElevation="4dp">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="wrap_content"
 
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
-        tools:itemCount="2"
-        tools:listitem="@layout/todo_item" />
-
+            tools:itemCount="2"
+            tools:listitem="@layout/todo_item" />
 
 
     </com.google.android.material.card.MaterialCardView>
