@@ -30,10 +30,9 @@
     </style>
 
     <style name="ThemeOverlay.App.Switch" parent="">
-        <item name="colorOnSurface">@color/back_primary</item>
         <item name="colorSecondary">@color/blue</item>
-        <item name="colorSurface">@color/label_secondary</item>
+        <item name="colorSurface">@color/switch_thumb</item>
+        <item name="colorOnSurface">@color/switch_track</item>
     </style>
-
 
 </resources>
