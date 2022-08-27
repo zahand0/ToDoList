@@ -10,5 +10,11 @@
     <string name="task_info">Task info</string>
     <string name="delete">Delete</string>
     <string name="show_done_tasks">Show done tasks</string>
-    <string name="deadline">Deadline is</string>
+    <string name="deadline">Deadline is:</string>
+
+    <string-array name="priority_array">
+        <item>None</item>
+        <item>Low</item>
+        <item><font fgcolor='#FF3B30'>!! Urgency</font></item>
+    </string-array>
 </resources>
