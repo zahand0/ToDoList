@@ -22,6 +22,8 @@
         <item name="android:textSize">@dimen/primaryTextSize</item>
         <item name="switchStyle">@style/Widget.App.Switch</item>
         <item name="android:colorControlActivated">@color/blue</item>
+        <item name="materialCalendarTheme">@style/ThemeOverlay.App.DatePicker</item>
+        <item name="android:spinnerItemStyle">@style/spinnerItemStyle</item>
     </style>
 
 </resources>
