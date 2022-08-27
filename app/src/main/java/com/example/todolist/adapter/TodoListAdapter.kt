@@ -1,6 +1,9 @@
 package com.example.todolist.adapter
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,7 +12,8 @@ import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
 import com.example.todolist.databinding.TodoItemBinding
 
-class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) : ListAdapter<TodoItem, TodoListAdapter.ItemViewHolder>(DiffCallBack) {
+class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
+    ListAdapter<TodoItem, TodoListAdapter.ItemViewHolder>(DiffCallBack) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -33,9 +37,19 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) : ListAdapt
             binding.taskDescription.text = item.description
             binding.taskStatus.isChecked = item.isDone
             binding.taskImportance.text = when (item.priority) {
-                TaskPriority.URGENT -> "!!"
-                TaskPriority.LOW -> "↓"
-                else -> ""
+                TaskPriority.URGENT -> {
+                    binding.taskImportance.setTextColor(Color.RED)
+                    binding.taskStatus.buttonTintList = ColorStateList.valueOf(Color.RED)
+                    "!!"
+                }
+                TaskPriority.LOW -> {
+                    binding.taskImportance.setTextColor(Color.GRAY)
+                    "↓"
+                }
+                else -> {
+                    binding.taskImportance.visibility = View.GONE
+                    ""
+                }
             }
         }
     }
