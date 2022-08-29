@@ -3,4 +3,5 @@
 
     <dimen name="primaryTextSize">18sp</dimen>
     <dimen name="secondaryTextSize">16sp</dimen>
+    <dimen name="swipeButtonWidth">80dp</dimen>
 </resources>
