@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,63 +11,120 @@
 
     <CheckBox
         android:id="@+id/task_status"
-        android:buttonTint="@color/green"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-
+        android:buttonTint="@color/green"
         android:checked="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/task_importance"
-        android:textColor="@color/label_primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_toEndOf="@id/task_status"
+        android:paddingTop="12dp"
+        android:paddingEnd="8dp"
+
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/label_primary"
         android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/task_status"
+        app:layout_constraintTop_toTopOf="@id/task_description"
+        tools:ignore="RtlSymmetry"
         tools:text="!!" />
 
     <TextView
         android:id="@+id/task_description"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_toStartOf="@id/info"
-        android:layout_toEndOf="@id/task_importance"
         android:ellipsize="end"
         android:maxLines="3"
+        android:paddingTop="12dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        tools:text="Buy something Buy something Buy something f f f f Buy something Buy something f f f f Buy something Buy something f f f f Buy something Buy something f f f f Buy something Buy something " />
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/info"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/task_importance"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Buy" />
 
     <TextView
         android:id="@+id/task_date"
-        android:textColor="@color/label_tertiary"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/task_description"
         android:layout_gravity="center_vertical"
-        android:layout_toEndOf="@id/task_status"
         android:maxLines="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/label_tertiary"
         android:textSize="@dimen/secondaryTextSize"
+        app:layout_constraintStart_toEndOf="@id/task_status"
+        app:layout_constraintTop_toBottomOf="@id/task_description"
         tools:text="date" />
 
-    <ImageView
+    <FrameLayout
         android:id="@+id/info"
-        app:tint="@color/label_tertiary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="8dp"
-        android:contentDescription="@string/task_info"
-        app:srcCompat="@drawable/ic_info" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
-</RelativeLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/task_info"
+
+            app:srcCompat="@drawable/ic_info"
+            app:tint="@color/label_tertiary" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/delete_button"
+        android:layout_width="@dimen/swipeButtonWidth"
+        android:layout_height="0dp"
+        android:background="@color/red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/info"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+
+            app:srcCompat="@drawable/ic_trash"
+            app:tint="@color/white" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/check_done"
+        android:layout_width="@dimen/swipeButtonWidth"
+        android:layout_height="0dp"
+        android:background="@color/green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+
+
+
+            app:srcCompat="@drawable/ic_done"
+            app:tint="@color/white" />
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
