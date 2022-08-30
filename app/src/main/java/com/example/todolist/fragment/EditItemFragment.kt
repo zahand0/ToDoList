@@ -1,5 +1,6 @@
 package com.example.todolist.fragment
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.TypedValue
@@ -12,6 +13,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.todolist.R
+import com.example.todolist.data.CommonDateFormats
 import com.example.todolist.databinding.FragmentEditItemBinding
 import com.example.todolist.viewmodel.TodoItemsViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -36,6 +38,7 @@ class EditItemFragment : Fragment() {
         return fragmentBinding.root
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -86,9 +89,12 @@ class EditItemFragment : Fragment() {
                         { view, year, monthOfYear, dayOfMonth ->
                             // on below line we are setting
                             // date to our edit text.
-                            val dat = (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
-                            binding?.pickedDate?.text = dat
-                            binding?.pickedDate?.visibility = View.VISIBLE
+                            val formatter = SimpleDateFormat(CommonDateFormats.DIGIT_DATE)
+                            val dat = formatter.parse("$dayOfMonth.$monthOfYear.$year")?.time
+                            dat?.let {
+                                binding?.pickedDate?.text = CommonDateFormats.msecToDate(dat, CommonDateFormats.SHORT_DATE)
+                                binding?.pickedDate?.visibility = View.VISIBLE
+                            }
                         },
                         // on below line we are passing year, month
                         // and day for the selected date in our date picker.
