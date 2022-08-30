@@ -9,7 +9,9 @@
 
 
     <style name="OutlinedRoundedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded</item>
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded
+        </item>
     </style>
 
     <style name="ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded" parent="">
@@ -38,11 +40,12 @@
     <style name="ThemeOverlay.App.DatePicker" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
         <item name="colorPrimary">@color/blue</item>
         <item name="colorOnPrimary">@color/label_primary</item>
-        <item name="android:textSize">12sp</item>
-<!--        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>-->
-<!--        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>-->
-<!--        &lt;!&ndash; Customize text field of the text input mode. &ndash;&gt;-->
-<!--        <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>-->
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <!--        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>-->
+        <!--        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>-->
+        <!--        &lt;!&ndash; Customize text field of the text input mode. &ndash;&gt;-->
+        <!--        <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>-->
     </style>
 
     <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
@@ -59,4 +62,43 @@
         <item name="android:textColor">@color/gray</item>
     </style>
 
+
+    <style name="MyDatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/blue</item>
+        <item name="color">@color/blue</item>
+        <!--selected Item color-->
+        <item name="colorControlActivated">@color/blue</item>
+        <!-- arrow bordercolor(<>)-->
+        <!--        <item name="android:selectableItemBackgroundBorderless">@color/blue</item>-->
+        <!-- Highlight item color-->
+        <!--        <item name="colorControlHighlight">#d50000</item>-->
+        <!--Calender Background color -->
+        <item name="android:windowBackground">@color/back_secondary</item>
+        <!-- Ok Cancel Color-->
+        <!--        <item name="android:textColor">@color/blue</item>-->
+        <!-- Week TextColor-->
+        <item name="android:textColorSecondary">@color/gray</item>
+        <!-- Calender Number color arrow color (< >) -->
+        <item name="android:textColorPrimary">@color/label_primary</item>
+        <!--day , month-->
+        <item name="android:textColorPrimaryInverse">@color/white</item>
+        <!-- year-->
+        <item name="android:textColorSecondaryInverse">@color/white</item>
+        <item name="android:buttonBarNegativeButtonStyle">
+            @style/DatePickerTheme.ButtonBarButtonStyle
+        </item>
+        <item name="android:buttonBarPositiveButtonStyle">
+            @style/DatePickerTheme.ButtonBarButtonStyle
+        </item>
+        <item name="android:editTextStyle">@style/date_text_appearance</item>
+    </style>
+
+    <style name="DatePickerTheme.ButtonBarButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/blue</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="date_text_appearance">
+        <item name="android:textStyle">italic</item>
+    </style>
 </resources>
