@@ -152,7 +152,7 @@ class TodoListFragment : Fragment() {
                             )
                         }
                         else
-                            if (viewHolder.itemView.scrollX in -limitScrollX + 1 until 0) {
+                            if (viewHolder.itemView.scrollX in -limitScrollX + 1 until -1) {
                             viewHolder.itemView.scrollTo(
                                 (currentScrollXWhenInActive * dX / initXWhenInActive).toInt(),
                                 0
