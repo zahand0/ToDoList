@@ -8,7 +8,13 @@
     android:minHeight="48dp"
 
     >
-
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/task"
+    android:layout_width="378dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
     <CheckBox
         android:id="@+id/task_status"
         android:layout_width="wrap_content"
@@ -32,11 +38,12 @@
         app:layout_constraintStart_toEndOf="@id/task_status"
         app:layout_constraintTop_toTopOf="@id/task_description"
         tools:ignore="RtlSymmetry"
+        android:visibility="gone"
         tools:text="!!" />
 
     <TextView
         android:id="@+id/task_description"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="3"
@@ -44,10 +51,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@id/info"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/task_importance"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Buy" />
+        tools:text="Play some games with new fancy wired gamepad with xbox logo on it" />
 
     <TextView
         android:id="@+id/task_date"
@@ -66,7 +73,6 @@
         android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -83,6 +89,8 @@
             app:srcCompat="@drawable/ic_info"
             app:tint="@color/label_tertiary" />
     </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     <FrameLayout
@@ -91,7 +99,7 @@
         android:layout_height="0dp"
         android:background="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/info"
+        app:layout_constraintStart_toEndOf="@id/task"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -108,10 +116,10 @@
         android:id="@+id/check_done"
         android:layout_width="@dimen/swipeButtonWidth"
         android:layout_height="0dp"
-        android:layout_marginEnd="1dp"
+
         android:background="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/task"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
