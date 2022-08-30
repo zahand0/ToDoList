@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
+import com.example.todolist.data.CommonDateFormats
+import com.example.todolist.data.CommonDateFormats.msecToDate
 import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
 import com.example.todolist.databinding.TodoItemBinding
@@ -75,11 +77,10 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
         }
 
         fun bind(item: TodoItem) {
-            binding.taskDate.text = item.deadlineDate
+            setDeadlineDate(item.deadlineDate)
             binding.taskDescription.text = item.description
             setCheckStatus(item.isDone)
             setImportance(item.priority)
-
         }
 
         private fun setImportance(priority: TaskPriority) {
@@ -111,6 +112,14 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
             } else {
                 binding.taskDescription.isEnabled = true
                 binding.taskDescription.paintFlags = binding.taskDescription.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            }
+        }
+
+        private fun setDeadlineDate(deadlineDate: Long?) {
+            if (deadlineDate == null) {
+                binding.taskDate.visibility = View.GONE
+            } else {
+                binding.taskDate.text = msecToDate(deadlineDate, CommonDateFormats.DIGIT_DATE)
             }
         }
     }
