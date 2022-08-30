@@ -1,10 +1,14 @@
 package com.example.todolist.fragment
 
+import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.todolist.R
@@ -38,29 +42,78 @@ class EditItemFragment : Fragment() {
         binding?.datePickerSwitch?.setOnCheckedChangeListener { compoundButton, b ->
             when (b) {
                 true -> {
-                    val datePicker =
-                        MaterialDatePicker.Builder.datePicker()
-                            .setTitleText("Select date")
-                            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                            .build()
+//                    val datePicker =
+//                        MaterialDatePicker.Builder.datePicker()
+//                            .setTitleText("Select date")
+//                            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+//                            .build()
+//
+//                    datePicker.show(childFragmentManager, "datePicker")
+//
+//                    datePicker.addOnPositiveButtonClickListener {
+//
+//                        val date = Date(it)
+//                        val dateString =
+//                            SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(date)
+//                                .lowercase()
+//                        binding?.pickedDate?.text = dateString
+//                        binding?.pickedDate?.visibility = View.VISIBLE
+//                    }
+//                    datePicker.addOnNegativeButtonClickListener {
+//                        compoundButton.isChecked = false
+//                    }
+//                    datePicker.addOnCancelListener {
+//                        compoundButton.isChecked = false
+//                    }
 
-                    datePicker.show(childFragmentManager, "datePicker")
 
-                    datePicker.addOnPositiveButtonClickListener {
+                    // on below line we are getting
+                    // the instance of our calendar.
+                    val c = Calendar.getInstance()
 
-                        val date = Date(it)
-                        val dateString =
-                            SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(date)
-                                .lowercase()
-                        binding?.pickedDate?.text = dateString
-                        binding?.pickedDate?.visibility = View.VISIBLE
-                    }
-                    datePicker.addOnNegativeButtonClickListener {
+                    // on below line we are getting
+                    // our day, month and year.
+                    val year = c.get(Calendar.YEAR)
+                    val month = c.get(Calendar.MONTH)
+                    val day = c.get(Calendar.DAY_OF_MONTH)
+
+                    // on below line we are creating a
+                    // variable for date picker dialog.
+                    val datePickerDialog = DatePickerDialog(
+                        // on below line we are passing context.
+                        requireContext(),
+                        R.style.MyDatePickerStyle,
+                        { view, year, monthOfYear, dayOfMonth ->
+                            // on below line we are setting
+                            // date to our edit text.
+                            val dat = (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
+                            binding?.pickedDate?.text = dat
+                            binding?.pickedDate?.visibility = View.VISIBLE
+                        },
+                        // on below line we are passing year, month
+                        // and day for the selected date in our date picker.
+                        year,
+                        month,
+                        day
+                    )
+                    // at last we are calling show
+                    // to display our date picker dialog.
+                    datePickerDialog.setOnCancelListener {
                         compoundButton.isChecked = false
                     }
-                    datePicker.addOnCancelListener {
-                        compoundButton.isChecked = false
-                    }
+                    val baseLayout = datePickerDialog.datePicker.getChildAt(0) as LinearLayout
+                    val childLayout = baseLayout.getChildAt(0) as LinearLayout
+
+                    val titleLayout = childLayout.getChildAt(0) as LinearLayout
+
+                    val dayText = titleLayout.getChildAt(1) as TextView
+                    dayText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 32f)
+//                    dayText.typeface = ResourcesCompat.getFont(activity, R.font.yourFont)
+
+                    val yearText = titleLayout.getChildAt(0) as TextView
+                    yearText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f)
+//                    yearText.typeface = ResourcesCompat.getFont(activity, R.font.yourFont)
+                    datePickerDialog.show()
 
                 }
                 else -> {
