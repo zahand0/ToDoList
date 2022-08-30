@@ -5,7 +5,7 @@ data class TodoItem(
     val description: String,
     val priority: TaskPriority,
     val isDone: Boolean,
-    val deadlineDate: Long,
+    val deadlineDate: Long?,
     val creationDate: Long,
     val lastEditDate: Long
 )
