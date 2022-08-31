@@ -7,17 +7,19 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.example.todolist.data.CommonDateFormats
+import com.example.todolist.data.TaskPriority
 import com.example.todolist.databinding.FragmentEditItemBinding
 import com.example.todolist.viewmodel.TodoItemsViewModel
-import com.google.android.material.datepicker.MaterialDatePicker
-import java.text.DateFormat
+import java.lang.Exception
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,6 +29,8 @@ class EditItemFragment : Fragment() {
     private var binding: FragmentEditItemBinding? = null
 
     private val viewModel: TodoItemsViewModel by activityViewModels()
+
+    val args: EditItemFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,98 +42,118 @@ class EditItemFragment : Fragment() {
         return fragmentBinding.root
     }
 
-    @SuppressLint("SimpleDateFormat")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.datePickerSwitch?.setOnCheckedChangeListener { compoundButton, b ->
-            when (b) {
-                true -> {
-//                    val datePicker =
-//                        MaterialDatePicker.Builder.datePicker()
-//                            .setTitleText("Select date")
-//                            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-//                            .build()
-//
-//                    datePicker.show(childFragmentManager, "datePicker")
-//
-//                    datePicker.addOnPositiveButtonClickListener {
-//
-//                        val date = Date(it)
-//                        val dateString =
-//                            SimpleDateFormat("d MMMM yyyy", Locale.getDefault()).format(date)
-//                                .lowercase()
-//                        binding?.pickedDate?.text = dateString
-//                        binding?.pickedDate?.visibility = View.VISIBLE
-//                    }
-//                    datePicker.addOnNegativeButtonClickListener {
-//                        compoundButton.isChecked = false
-//                    }
-//                    datePicker.addOnCancelListener {
-//                        compoundButton.isChecked = false
-//                    }
-
-
-                    // on below line we are getting
-                    // the instance of our calendar.
-                    val c = Calendar.getInstance()
-
-                    // on below line we are getting
-                    // our day, month and year.
-                    val year = c.get(Calendar.YEAR)
-                    val month = c.get(Calendar.MONTH)
-                    val day = c.get(Calendar.DAY_OF_MONTH)
-
-                    // on below line we are creating a
-                    // variable for date picker dialog.
-                    val datePickerDialog = DatePickerDialog(
-                        // on below line we are passing context.
-                        requireContext(),
-                        R.style.MyDatePickerStyle,
-                        { view, year, monthOfYear, dayOfMonth ->
-                            // on below line we are setting
-                            // date to our edit text.
-                            val formatter = SimpleDateFormat(CommonDateFormats.DIGIT_DATE)
-                            val dat = formatter.parse("$dayOfMonth.$monthOfYear.$year")?.time
-                            dat?.let {
-                                binding?.pickedDate?.text = CommonDateFormats.msecToDate(dat, CommonDateFormats.SHORT_DATE)
-                                binding?.pickedDate?.visibility = View.VISIBLE
-                            }
-                        },
-                        // on below line we are passing year, month
-                        // and day for the selected date in our date picker.
-                        year,
-                        month,
-                        day
-                    )
-                    // at last we are calling show
-                    // to display our date picker dialog.
-                    datePickerDialog.setOnCancelListener {
-                        compoundButton.isChecked = false
-                    }
-                    val baseLayout = datePickerDialog.datePicker.getChildAt(0) as LinearLayout
-                    val childLayout = baseLayout.getChildAt(0) as LinearLayout
-
-                    val titleLayout = childLayout.getChildAt(0) as LinearLayout
-
-                    val dayText = titleLayout.getChildAt(1) as TextView
-                    dayText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 32f)
-//                    dayText.typeface = ResourcesCompat.getFont(activity, R.font.yourFont)
-
-                    val yearText = titleLayout.getChildAt(0) as TextView
-                    yearText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f)
-//                    yearText.typeface = ResourcesCompat.getFont(activity, R.font.yourFont)
-                    datePickerDialog.show()
-
-                }
-                else -> {
-                    binding?.pickedDate?.visibility = View.GONE
-                }
+        binding?.datePickerSwitch?.setOnCheckedChangeListener { _, b ->
+            if (b) {
+                creatingDatePickerDialog()
+            } else {
+                binding?.pickedDate?.visibility = View.GONE
+                binding?.pickedDate?.text = ""
             }
         }
 
-//        val spinner = binding?.spinner
-//        val spinnerAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.priority_array, R.layout.fragment_edit_item)
+        binding?.topAppBar?.setNavigationOnClickListener {
+            val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
+            this.findNavController().navigate(action)
+        }
 
+        binding?.topAppBar?.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.save_task -> {
+                    saveTask()
+                    true
+                }
+                else -> false
+            }
+        }
+        binding?.delete?.isEnabled = !args.addNewItem
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun saveTask() {
+        if (args.addNewItem) {
+            binding?.let {
+                var deadlineDate: Long? = null
+                try {
+                    deadlineDate = SimpleDateFormat(CommonDateFormats.SHORT_DATE)
+                        .parse(it.pickedDate.text.toString())?.time
+                } catch (e: ParseException) {
+                }
+
+                viewModel.addItem(
+                    it.description.text?.toString() ?: "",
+                    getTaskPriority(it.priority.selectedItem.toString()),
+                    false,
+                    deadlineDate,
+                    Calendar.getInstance().timeInMillis,
+                    Calendar.getInstance().timeInMillis
+                )
+            }
+        }
+        val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
+        this.findNavController().navigate(action)
+    }
+
+    private fun getTaskPriority(priority: String): TaskPriority {
+        val prioritiesFromXml = resources.getStringArray(R.array.priority_array).toSet()
+        val priorities = listOf("None", "Low", "!! Urgency")
+        if (priorities.toSet() != prioritiesFromXml)
+            throw IllegalArgumentException("Priorities from xml not match priorities from code")
+        return when (priority) {
+            priorities[1] -> TaskPriority.LOW
+            priorities[2] -> TaskPriority.URGENT
+            else -> TaskPriority.NORMAL
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun creatingDatePickerDialog() {
+        // on below line we are getting
+        // the instance of our calendar.
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        // on below line we are creating a
+        // variable for date picker dialog.
+        val datePickerDialog = DatePickerDialog(
+            // on below line we are passing context.
+            requireContext(),
+            R.style.MyDatePickerStyle,
+            { view, year, monthOfYear, dayOfMonth ->
+                // on below line we are setting
+                // date to our edit text.
+                val formatter = SimpleDateFormat(CommonDateFormats.DIGIT_DATE)
+                val dat = formatter.parse("$dayOfMonth.$monthOfYear.$year")?.time
+                dat?.let {
+                    binding?.pickedDate?.text =
+                        CommonDateFormats.msecToDate(it, CommonDateFormats.SHORT_DATE)
+                    binding?.pickedDate?.visibility = View.VISIBLE
+                }
+            },
+            year,
+            month,
+            day
+        )
+        // at last we are calling show
+        // to display our date picker dialog.
+        datePickerDialog.setOnCancelListener {
+            binding?.datePickerSwitch?.isChecked = false
+        }
+        val baseLayout = datePickerDialog.datePicker.getChildAt(0) as LinearLayout
+        val childLayout = baseLayout.getChildAt(0) as LinearLayout
+
+        val titleLayout = childLayout.getChildAt(0) as LinearLayout
+
+        val dayText = titleLayout.getChildAt(1) as TextView
+        dayText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 32f)
+
+        val yearText = titleLayout.getChildAt(0) as TextView
+        yearText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f)
+        datePickerDialog.show()
     }
 }
