@@ -9,14 +9,13 @@
 
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/topAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:elevation="16dp"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
-
+            android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/back_primary"
@@ -46,7 +45,6 @@
                 app:cardElevation="4dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/filledTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:boxBackgroundColor="@color/back_secondary"
@@ -54,6 +52,7 @@
                     app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
@@ -81,7 +80,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/priority"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
@@ -148,16 +147,17 @@
 
 
             <Button
-                android:id="@+id/textButton"
+                android:id="@+id/delete"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/delete"
+                android:enabled="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/red"
+                android:textColor="@color/delete_button_color"
                 app:icon="@drawable/ic_trash"
-                app:iconTint="@color/red" />
+                app:iconTint="@color/delete_button_color" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
