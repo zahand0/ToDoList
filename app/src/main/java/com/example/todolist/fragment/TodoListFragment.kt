@@ -42,7 +42,7 @@ class TodoListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = TodoListAdapter {
-            val action = TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment(it.id)
+            val action = TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment(false, it.id)
             this.findNavController().navigate(action)
         }
 //        adapter.submitList(viewModel.allItems.value)
@@ -52,11 +52,6 @@ class TodoListFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.allItems.collectLatest {
                 adapter.submitList(it)
-                Log.d(
-                    "TodoListFragment",
-                    it.joinToString { list ->
-                        "${list.id} ${list.description.subSequence(0..5)}"
-                    })
             }
         }
 
@@ -69,9 +64,7 @@ class TodoListFragment : Fragment() {
 
         binding?.recyclerView?.layoutManager = LinearLayoutManager(this.context)
         binding?.addNewTask?.setOnClickListener {
-            val action = TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment(
-                "03"
-            )
+            val action = TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment()
             this.findNavController().navigate(action)
 //            viewModel.addItem(
 //                "TASK DECRIPTION",
