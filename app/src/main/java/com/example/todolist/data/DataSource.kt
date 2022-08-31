@@ -1,24 +1,110 @@
 package com.example.todolist.data
 
+import kotlinx.coroutines.flow.MutableStateFlow
+
 object DataSource {
 
-    val todoItems = mutableListOf(
-        TodoItem("01", "Вернуться из Армии", TaskPriority.NORMAL, true, 1657141200000, 1625432400000, 1657314000000),
-        TodoItem("02", "My name is Yoshikage Kira. I’m 33 years old. My house is in the northeast section of Morioh, where all the villas are, and I am not married. I work as an employee for the Kame Yu department stores, and I get home every day by 8 PM at the latest.", TaskPriority.LOW, true, null, 1657314000000, 1657314000000),
-        TodoItem("03", "Доделать приложение", TaskPriority.NORMAL, false, null, 1661806800000, 1661806800000),
-        TodoItem("04", "Buy some berries", TaskPriority.NORMAL, true, null, 1661806800000, 1661806800000),
-        TodoItem("05", "Celebrate Day of Knowledge", TaskPriority.LOW, false, 1661979600000, 1661806800000, 1661806800000),
-        TodoItem("06", "Найти работу", TaskPriority.URGENT, false, 1664571600000, 1661806800000, 1661806800000),
-        TodoItem("07", "Buy 12 Bananas", TaskPriority.LOW, false, null, 1661806800000, 1661806800000),
-        TodoItem("08", "Go to park.", TaskPriority.NORMAL, true, 1664844400000, 1661806800000, 1661806800000),
-        TodoItem("09", "Выжить", TaskPriority.URGENT, true, 1662152400000, 1661806800000, 1657314000000),
-        TodoItem("10", "Play some games with new fancy wired gamepad with xbox logo on it", TaskPriority.LOW, false, null, 1661806800000, 1661806800000)
+    val todoItems = MutableStateFlow(
+        mutableListOf(
+            TodoItem(
+                "01",
+                "Вернуться из Армии",
+                TaskPriority.NORMAL,
+                true,
+                1657141200000,
+                1625432400000,
+                1657314000000
+            ),
+            TodoItem(
+                "02",
+                "My name is Yoshikage Kira. I’m 33 years old. My house is in the northeast section of Morioh, where all the villas are, and I am not married. I work as an employee for the Kame Yu department stores, and I get home every day by 8 PM at the latest.",
+                TaskPriority.LOW,
+                true,
+                null,
+                1657314000000,
+                1657314000000
+            ),
+            TodoItem(
+                "03",
+                "Доделать приложение",
+                TaskPriority.NORMAL,
+                false,
+                null,
+                1661806800000,
+                1661806800000
+            ),
+            TodoItem(
+                "04",
+                "Buy some berries",
+                TaskPriority.NORMAL,
+                true,
+                null,
+                1661806800000,
+                1661806800000
+            ),
+            TodoItem(
+                "05",
+                "Celebrate Day of Knowledge",
+                TaskPriority.LOW,
+                false,
+                1661979600000,
+                1661806800000,
+                1661806800000
+            ),
+            TodoItem(
+                "06",
+                "Найти работу",
+                TaskPriority.URGENT,
+                false,
+                1664571600000,
+                1661806800000,
+                1661806800000
+            ),
+            TodoItem(
+                "07",
+                "Buy 12 Bananas",
+                TaskPriority.LOW,
+                false,
+                null,
+                1661806800000,
+                1661806800000
+            ),
+            TodoItem(
+                "08",
+                "Go to park.",
+                TaskPriority.NORMAL,
+                true,
+                1664844400000,
+                1661806800000,
+                1661806800000
+            ),
+            TodoItem(
+                "09",
+                "Выжить",
+                TaskPriority.URGENT,
+                true,
+                1662152400000,
+                1661806800000,
+                1657314000000
+            ),
+            TodoItem(
+                "10",
+                "Play some games with new fancy wired gamepad with xbox logo on it",
+                TaskPriority.LOW,
+                false,
+                null,
+                1661806800000,
+                1661806800000
+            )
+        )
     )
 
-    var maxId = 10
+    private var maxId = 10
 
     fun addItem(item: TodoItem) {
         maxId += 1
-        todoItems.add(item.copy(id = maxId.toString()))
+        val list = todoItems.value.toMutableList()
+        list.add(item.copy(id = maxId.toString()))
+        todoItems.value = list
     }
 }
