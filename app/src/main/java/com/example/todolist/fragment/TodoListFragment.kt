@@ -1,22 +1,26 @@
 package com.example.todolist.fragment
 
-import android.content.Context
 import android.graphics.Canvas
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.adapter.TodoListAdapter
+import com.example.todolist.data.TaskPriority
 import com.example.todolist.databinding.FragmentTodoListBinding
 import com.example.todolist.viewmodel.TodoItemsViewModel
+import kotlinx.coroutines.flow.collectLatest
+import java.util.*
 
 class TodoListFragment : Fragment() {
 
@@ -41,9 +45,27 @@ class TodoListFragment : Fragment() {
             val action = TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment(it.id)
             this.findNavController().navigate(action)
         }
+//        adapter.submitList(viewModel.allItems.value)
 
-        adapter.submitList(viewModel.allItems)
         binding?.recyclerView?.adapter = adapter
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.allItems.collectLatest {
+                adapter.submitList(it)
+                Log.d(
+                    "TodoListFragment",
+                    it.joinToString { list ->
+                        "${list.id} ${list.description.subSequence(0..5)}"
+                    })
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+
+            viewModel.doneTasks.collectLatest {
+                binding?.doneTasks?.text = getString(R.string.tasks_done).format(it)
+            }
+        }
 
         binding?.recyclerView?.layoutManager = LinearLayoutManager(this.context)
         binding?.addNewTask?.setOnClickListener {
@@ -51,6 +73,13 @@ class TodoListFragment : Fragment() {
                 "03"
             )
             this.findNavController().navigate(action)
+//            viewModel.addItem(
+//                "TASK DECRIPTION",
+//                TaskPriority.NORMAL,
+//                true,
+//                Calendar.getInstance().timeInMillis,
+//                Calendar.getInstance().timeInMillis
+//            )
         }
 
         binding?.showDoneTasks?.setOnClickListener {
@@ -64,6 +93,8 @@ class TodoListFragment : Fragment() {
                 (appBarLayout.totalScrollRange + verticalOffset).toFloat() / appBarLayout.totalScrollRange
 
         }
+
+
 
         setItemTouchHelper()
     }
@@ -150,14 +181,13 @@ class TodoListFragment : Fragment() {
                                 (currentScrollXWhenInActive * dX / initXWhenInActive).toInt(),
                                 0
                             )
-                        }
-                        else
+                        } else
                             if (viewHolder.itemView.scrollX in -limitScrollX + 1 until -1) {
-                            viewHolder.itemView.scrollTo(
-                                (currentScrollXWhenInActive * dX / initXWhenInActive).toInt(),
-                                0
-                            )
-                        }
+                                viewHolder.itemView.scrollTo(
+                                    (currentScrollXWhenInActive * dX / initXWhenInActive).toInt(),
+                                    0
+                                )
+                            }
                     }
                 }
             }
