@@ -22,6 +22,7 @@ class TodoItemsViewModel : ViewModel() {
         description: String,
         priority: TaskPriority,
         isDone: Boolean,
+        deadlineDate: Long?,
         creationDate: Long,
         editDate: Long
     ) {
@@ -31,7 +32,7 @@ class TodoItemsViewModel : ViewModel() {
             description,
             priority,
             isDone,
-            null,
+            deadlineDate,
             creationDate,
             editDate
         )
