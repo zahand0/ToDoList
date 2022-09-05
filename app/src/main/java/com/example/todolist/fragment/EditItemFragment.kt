@@ -11,14 +11,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.example.todolist.data.CommonDateFormats
 import com.example.todolist.data.TaskPriority
+import com.example.todolist.data.TodoItem
 import com.example.todolist.databinding.FragmentEditItemBinding
 import com.example.todolist.viewmodel.TodoItemsViewModel
-import java.lang.Exception
+import kotlinx.coroutines.flow.collectLatest
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,7 +32,9 @@ class EditItemFragment : Fragment() {
 
     private val viewModel: TodoItemsViewModel by activityViewModels()
 
-    val args: EditItemFragmentArgs by navArgs()
+    private val args: EditItemFragmentArgs by navArgs()
+
+    private lateinit var item: TodoItem
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +50,8 @@ class EditItemFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        determineEditOrAddItem()
+
         binding?.datePickerSwitch?.setOnCheckedChangeListener { _, b ->
             if (b) {
                 creatingDatePickerDialog()
@@ -60,29 +66,35 @@ class EditItemFragment : Fragment() {
             this.findNavController().navigate(action)
         }
 
+//        binding?.topAppBar?.setOnMenuItemClickListener { menuItem ->
+//            when (menuItem.itemId) {
+//                R.id.save_task -> {
+//                    addNewItem()
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
+        binding?.delete?.isEnabled = !args.addNewItem
+    }
+
+    private fun setupTopAppBarMenu(saveTaskResponse: () -> Unit) {
         binding?.topAppBar?.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.save_task -> {
-                    saveTask()
+                    saveTaskResponse()
                     true
                 }
                 else -> false
             }
         }
-        binding?.delete?.isEnabled = !args.addNewItem
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun saveTask() {
+    private fun addNewItem() {
         if (args.addNewItem) {
             binding?.let {
-                var deadlineDate: Long? = null
-                try {
-                    deadlineDate = SimpleDateFormat(CommonDateFormats.SHORT_DATE)
-                        .parse(it.pickedDate.text.toString())?.time
-                } catch (e: ParseException) {
-                }
-
+                val deadlineDate: Long? = getDeadlineDate()
                 viewModel.addItem(
                     it.description.text?.toString() ?: "",
                     getTaskPriority(it.priority.selectedItem.toString()),
@@ -97,6 +109,20 @@ class EditItemFragment : Fragment() {
         this.findNavController().navigate(action)
     }
 
+    @SuppressLint("SimpleDateFormat")
+    private fun getDeadlineDate(): Long? {
+        var deadlineDate: Long? = null
+        binding?.let {
+
+            try {
+                deadlineDate = SimpleDateFormat(CommonDateFormats.SHORT_DATE)
+                    .parse(it.pickedDate.text.toString())?.time
+            } catch (e: ParseException) {
+            }
+        }
+        return deadlineDate
+    }
+
     private fun getTaskPriority(priority: String): TaskPriority {
         val prioritiesFromXml = resources.getStringArray(R.array.priority_array).toSet()
         val priorities = listOf("None", "Low", "!! Urgency")
@@ -107,6 +133,73 @@ class EditItemFragment : Fragment() {
             priorities[2] -> TaskPriority.URGENT
             else -> TaskPriority.NORMAL
         }
+    }
+
+    private fun setTaskPriority(priority: TaskPriority): Int {
+        val prioritiesFromXml = resources.getStringArray(R.array.priority_array).toSet()
+        val priorities = listOf("None", "Low", "!! Urgency")
+        if (priorities.toSet() != prioritiesFromXml)
+            throw IllegalArgumentException("Priorities from xml not match priorities from code")
+        return when (priority) {
+            TaskPriority.LOW -> 1
+            TaskPriority.URGENT -> 2
+            else -> 0
+        }
+    }
+
+    private fun determineEditOrAddItem() {
+        if (!args.addNewItem) {
+            lifecycleScope.launchWhenStarted {
+                viewModel.retrieveItem(args.itemId)?.collectLatest { selectedItem ->
+                    item = selectedItem
+                    bind(item)
+                    setupTopAppBarMenu(::updateItem)
+                }
+            }
+        } else {
+            setupTopAppBarMenu(::addNewItem)
+        }
+    }
+
+    private fun updateItem() {
+        binding?.let {
+            viewModel.updateItem(
+                item.id,
+                it.description.text.toString(),
+                getTaskPriority(it.priority.selectedItem.toString()),
+                item.isDone,
+                getDeadlineDate(),
+                item.creationDate,
+                Calendar.getInstance().timeInMillis
+            )
+        }
+        val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
+        this.findNavController().navigate(action)
+    }
+
+    private fun bind(itemToDisplay: TodoItem) {
+        binding?.apply {
+            description.setText(itemToDisplay.description)
+            priority.setSelection(setTaskPriority(itemToDisplay.priority))
+            if (itemToDisplay.deadlineDate != null) {
+                pickedDate.setText(
+                    CommonDateFormats.msecToDate(
+                        itemToDisplay.deadlineDate,
+                        CommonDateFormats.SHORT_DATE
+                    )
+                )
+//                TODO("Turn on deadline switch")
+            }
+            delete.setOnClickListener {
+                deleteItem(itemToDisplay.id)
+                val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
+                this@EditItemFragment.findNavController().navigate(action)
+            }
+        }
+    }
+
+    private fun deleteItem(itemId: String) {
+        viewModel.deleteItem(itemId)
     }
 
     @SuppressLint("SimpleDateFormat")
