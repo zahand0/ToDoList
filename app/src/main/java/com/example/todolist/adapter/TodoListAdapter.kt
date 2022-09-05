@@ -42,7 +42,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
         private val view = WeakReference(binding.root)
 
         var onDeleteClick: ((RecyclerView.ViewHolder)-> Unit)? = {
-            // TODO(implement item deleting)
+//            TODO("implement item deleting")
             binding.taskDescription.text = "DELETED"
         }
 
