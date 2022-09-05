@@ -2,7 +2,6 @@ package com.example.todolist.fragment
 
 import android.graphics.Canvas
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,11 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.adapter.TodoListAdapter
-import com.example.todolist.data.TaskPriority
 import com.example.todolist.databinding.FragmentTodoListBinding
 import com.example.todolist.viewmodel.TodoItemsViewModel
 import kotlinx.coroutines.flow.collectLatest
-import java.util.*
 
 class TodoListFragment : Fragment() {
 
@@ -42,21 +39,23 @@ class TodoListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = TodoListAdapter {
-            val action = TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment(false, it.id)
+            val action =
+                TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment(false, it.id)
             this.findNavController().navigate(action)
         }
 //        adapter.submitList(viewModel.allItems.value)
 
         binding?.recyclerView?.adapter = adapter
 
+        // display all tasks
         lifecycleScope.launchWhenStarted {
             viewModel.allItems.collectLatest {
                 adapter.submitList(it)
             }
         }
 
+        // display number of done tasks in top app bar
         lifecycleScope.launchWhenStarted {
-
             viewModel.doneTasks.collectLatest {
                 binding?.doneTasks?.text = getString(R.string.tasks_done).format(it)
             }
@@ -66,13 +65,6 @@ class TodoListFragment : Fragment() {
         binding?.addNewTask?.setOnClickListener {
             val action = TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment()
             this.findNavController().navigate(action)
-//            viewModel.addItem(
-//                "TASK DECRIPTION",
-//                TaskPriority.NORMAL,
-//                true,
-//                Calendar.getInstance().timeInMillis,
-//                Calendar.getInstance().timeInMillis
-//            )
         }
 
         binding?.showDoneTasks?.setOnClickListener {
@@ -80,6 +72,7 @@ class TodoListFragment : Fragment() {
         }
 
 //          binding?.doneTasks?.visibility = View.INVISIBLE
+        // wrap/unwrap top app bar
         binding?.appBarLayout?.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
 
             binding?.doneTasks?.alpha =
@@ -150,14 +143,14 @@ class TodoListFragment : Fragment() {
                         // swipe with finger
 
                         var scrollOffset = currentScrollX + (-dX).toInt()
+                        // limit swipe
                         if (scrollOffset > limitScrollX) {
+                            // swipe left
                             scrollOffset = limitScrollX
                         } else if (scrollOffset < -limitScrollX) {
+                            // swipe right
                             scrollOffset = -limitScrollX
                         }
-//                        else if ((-limitScrollX < scrollOffset) && (scrollOffset < limitScrollX)) {
-//                            scrollOffset = 0
-//                        }
 
                         viewHolder.itemView.scrollTo(scrollOffset, 0)
 
