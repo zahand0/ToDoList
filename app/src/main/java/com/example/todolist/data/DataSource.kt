@@ -1,6 +1,7 @@
 package com.example.todolist.data
 
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 object DataSource {
 
@@ -105,6 +106,31 @@ object DataSource {
         maxId += 1
         val list = todoItems.value.toMutableList()
         list.add(item.copy(id = maxId.toString()))
+        todoItems.value = list
+    }
+
+    fun retrieveItem(id: String): StateFlow<TodoItem>? {
+        val item = todoItems.value.firstOrNull { it.id == id }
+        return if (item == null) null else MutableStateFlow(item)
+    }
+
+    fun updateItem(item: TodoItem) {
+        val list = todoItems.value.toMutableList()
+        val updateItemIndex = list.indexOfFirst { it.id == item.id }
+        if (updateItemIndex == -1) {
+            addItem(item)
+        } else {
+            list[updateItemIndex] = item
+        }
+        todoItems.value = list
+    }
+
+    fun deleteItem(itemId: String) {
+        val list = todoItems.value.toMutableList()
+        val itemToDeleteIndex = list.indexOfFirst { it.id == itemId }
+        if (itemToDeleteIndex != -1) {
+            list.removeAt(itemToDeleteIndex)
+        }
         todoItems.value = list
     }
 }
