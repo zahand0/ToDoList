@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
 import com.example.todolist.repository.TodoItemsRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 
 class TodoItemsViewModel : ViewModel() {
 
@@ -38,6 +35,33 @@ class TodoItemsViewModel : ViewModel() {
         )
         todoItemsRepository.addItem(item)
 
+    }
+
+    fun retrieveItem(id: String): StateFlow<TodoItem>? = todoItemsRepository.retrieveItem(id)
+
+    fun updateItem(
+        id: String,
+        description: String,
+        priority: TaskPriority,
+        isDone: Boolean,
+        deadlineDate: Long?,
+        creationDate: Long,
+        editDate: Long
+    ) {
+        val item = TodoItem(
+            id,
+            description,
+            priority,
+            isDone,
+            deadlineDate,
+            creationDate,
+            editDate
+        )
+        todoItemsRepository.updateItem(item)
+    }
+
+    fun deleteItem(itemId: String) {
+        todoItemsRepository.deleteItem(itemId)
     }
 
     private fun getDoneTasksCount(tasksList: List<TodoItem>):Int {
