@@ -3,6 +3,7 @@ package com.example.todolist.fragment
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -25,8 +26,10 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
+const val TAG = "EditItemFragment"
 
 class EditItemFragment : Fragment() {
+
 
     private var binding: FragmentEditItemBinding? = null
 
@@ -54,7 +57,10 @@ class EditItemFragment : Fragment() {
 
         binding?.datePickerSwitch?.setOnCheckedChangeListener { _, b ->
             if (b) {
-                creatingDatePickerDialog()
+                // if pickedDate not empty let enable switch without creating date picker dialog
+                if (binding?.pickedDate?.text == "") {
+                    creatingDatePickerDialog()
+                }
             } else {
                 binding?.pickedDate?.visibility = View.GONE
                 binding?.pickedDate?.text = ""
@@ -66,15 +72,6 @@ class EditItemFragment : Fragment() {
             this.findNavController().navigate(action)
         }
 
-//        binding?.topAppBar?.setOnMenuItemClickListener { menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.save_task -> {
-//                    addNewItem()
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
         binding?.delete?.isEnabled = !args.addNewItem
     }
 
@@ -188,7 +185,9 @@ class EditItemFragment : Fragment() {
                         CommonDateFormats.SHORT_DATE
                     )
                 )
-//                TODO("Turn on deadline switch")
+                datePickerSwitch.isChecked = true
+                Log.d(TAG, "enabling datePickerSwitch")
+                pickedDate.visibility = View.VISIBLE
             }
             delete.setOnClickListener {
                 deleteItem(itemToDisplay.id)
@@ -204,6 +203,7 @@ class EditItemFragment : Fragment() {
 
     @SuppressLint("SimpleDateFormat")
     private fun creatingDatePickerDialog() {
+        Log.d(TAG, "creatingDatePickerDialog")
         // on below line we are getting
         // the instance of our calendar.
         val calendar = Calendar.getInstance()
@@ -221,7 +221,7 @@ class EditItemFragment : Fragment() {
                 // on below line we are setting
                 // date to our edit text.
                 val formatter = SimpleDateFormat(CommonDateFormats.DIGIT_DATE)
-                val dat = formatter.parse("$dayOfMonth.$monthOfYear.$year")?.time
+                val dat = formatter.parse("$dayOfMonth.${monthOfYear + 1}.$year")?.time
                 dat?.let {
                     binding?.pickedDate?.text =
                         CommonDateFormats.msecToDate(it, CommonDateFormats.SHORT_DATE)
