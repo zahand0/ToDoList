@@ -29,6 +29,9 @@
             android:defaultValue="-1"/>
         <action
             android:id="@+id/action_editItemFragment_to_todoListFragment"
-            app:destination="@id/todoListFragment" />
+            app:destination="@id/todoListFragment"
+            app:popUpTo="@id/todoListFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
 </navigation>
