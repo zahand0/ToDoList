@@ -25,7 +25,7 @@ class TodoItemsViewModel : ViewModel() {
     ) {
 
         val item = TodoItem(
-            "",
+            0,
             description,
             priority,
             isDone,
@@ -37,10 +37,10 @@ class TodoItemsViewModel : ViewModel() {
 
     }
 
-    fun retrieveItem(id: String): StateFlow<TodoItem>? = todoItemsRepository.retrieveItem(id)
+    fun retrieveItem(id: Int): StateFlow<TodoItem>? = todoItemsRepository.retrieveItem(id)
 
     fun updateItem(
-        id: String,
+        id: Int,
         description: String,
         priority: TaskPriority,
         isDone: Boolean,
@@ -60,7 +60,7 @@ class TodoItemsViewModel : ViewModel() {
         todoItemsRepository.updateItem(item)
     }
 
-    fun deleteItem(itemId: String) {
+    fun deleteItem(itemId: Int) {
         todoItemsRepository.deleteItem(itemId)
     }
 

@@ -18,10 +18,10 @@ class TodoItemsRepository {
         DataSource.addItem(item)
     }
 
-    fun retrieveItem(id: String): StateFlow<TodoItem>? = DataSource.retrieveItem(id)
+    fun retrieveItem(id: Int): StateFlow<TodoItem>? = DataSource.retrieveItem(id)
 
     fun updateItem(item: TodoItem) = DataSource.updateItem(item)
 
-    fun deleteItem(itemId: String) = DataSource.deleteItem(itemId)
+    fun deleteItem(itemId: Int) = DataSource.deleteItem(itemId)
 
 }

@@ -197,7 +197,7 @@ class EditItemFragment : Fragment() {
         }
     }
 
-    private fun deleteItem(itemId: String) {
+    private fun deleteItem(itemId: Int) {
         viewModel.deleteItem(itemId)
     }
 
