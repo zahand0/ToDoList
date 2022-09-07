@@ -25,7 +25,7 @@
             android:defaultValue="true"/>
         <argument
             android:name="item_id"
-            app:argType="string"
+            app:argType="integer"
             android:defaultValue="-1"/>
         <action
             android:id="@+id/action_editItemFragment_to_todoListFragment"
