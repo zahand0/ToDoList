@@ -103,7 +103,6 @@
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/date_picker_switch"
-                    style="@style/Preference.SwitchPreferenceCompat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
