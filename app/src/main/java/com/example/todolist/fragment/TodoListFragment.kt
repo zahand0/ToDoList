@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.adapter.TodoListAdapter
 import com.example.todolist.databinding.FragmentTodoListBinding
+import com.example.todolist.viewmodel.TodoItemViewModelFactory
 import com.example.todolist.viewmodel.TodoItemsViewModel
 import kotlinx.coroutines.flow.collectLatest
 
@@ -23,7 +24,15 @@ class TodoListFragment : Fragment() {
 
     private var binding: FragmentTodoListBinding? = null
 
-    private val viewModel: TodoItemsViewModel by activityViewModels()
+    private val viewModel: TodoItemsViewModel by lazy {
+        val activity = requireNotNull(this.activity) {
+            "You can only access the viewModel after onActivityCreated()"
+        }
+        ViewModelProvider(
+            this,
+            TodoItemViewModelFactory(activity.application)
+        )[TodoItemsViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
