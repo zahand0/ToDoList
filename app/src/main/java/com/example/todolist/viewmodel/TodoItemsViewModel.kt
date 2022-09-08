@@ -1,19 +1,27 @@
 package com.example.todolist.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
+import com.example.todolist.data.database.ItemDatabase
 import com.example.todolist.repository.TodoItemsRepository
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-class TodoItemsViewModel : ViewModel() {
+class TodoItemsViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val todoItemsRepository = TodoItemsRepository()
+    private val repository = TodoItemsRepository(ItemDatabase.getDatabase(application))
 
 
-    val allItems: StateFlow<List<TodoItem>> = todoItemsRepository.todoItems
+    val allItems: StateFlow<List<TodoItem>> =
+        repository.todoItems.stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+
     val _doneTasks = MutableStateFlow(getDoneTasksCount(allItems.value))
     val doneTasks = _doneTasks.asStateFlow()
+
 
     fun addItem(
         description: String,
@@ -33,11 +41,21 @@ class TodoItemsViewModel : ViewModel() {
             creationDate,
             editDate
         )
-        todoItemsRepository.addItem(item)
+        viewModelScope.launch {
+            repository.addItem(item)
+        }
+
 
     }
 
-    fun retrieveItem(id: Int): StateFlow<TodoItem>? = todoItemsRepository.retrieveItem(id)
+    fun retrieveItem(id: Int): TodoItem? {
+        return runBlocking(Dispatchers.IO) {
+            Log.d("repoViewModel", "call retrieveItem")
+            val res = repository.retrieveItem(id)
+            Log.d("repoViewModel", "result")
+            res?.first()
+        }
+    }
 
     fun updateItem(
         id: Int,
@@ -57,14 +75,18 @@ class TodoItemsViewModel : ViewModel() {
             creationDate,
             editDate
         )
-        todoItemsRepository.updateItem(item)
+        viewModelScope.launch {
+            repository.updateItem(item)
+        }
     }
 
     fun deleteItem(itemId: Int) {
-        todoItemsRepository.deleteItem(itemId)
+        viewModelScope.launch {
+            repository.deleteItem(itemId)
+        }
     }
 
-    private fun getDoneTasksCount(tasksList: List<TodoItem>):Int {
+    private fun getDoneTasksCount(tasksList: List<TodoItem>): Int {
         return tasksList.filter { it.isDone }.size
     }
 }
