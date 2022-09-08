@@ -14,18 +14,18 @@ interface ItemDao {
     @Update
     suspend fun update(item: TodoItem)
 
-    @Delete
-    suspend fun delete(item: TodoItem)
+    @Query("DELETE FROM item WHERE id = :id")
+    fun delete(id: Int)
 
     @Query("SELECT * FROM item WHERE id = :id")
-    fun getItem(id: Int): Flow<TodoItem>
+    fun getItem(id: Int): Flow<TodoItem>?
 
-    @Query("SELECT * FROM item ORDER BY last_edit_date DESC")
+    @Query("SELECT * FROM item ORDER BY creation_date ASC")
     fun getItems(): Flow<List<TodoItem>>
 
-    @Query("SELECT * FROM item WHERE is_done = 0 ORDER BY last_edit_date DESC")
+    @Query("SELECT * FROM item WHERE is_done = 0 ORDER BY creation_date ASC")
     fun getUndoneItems(): Flow<List<TodoItem>>
 
-    @Query("SELECT COUNT(*) FROM item WHERE is_done = 1 ORDER BY last_edit_date DESC")
+    @Query("SELECT COUNT(*) FROM item WHERE is_done = 1")
     fun getNumberDoneItems(): Flow<Int>
 }
