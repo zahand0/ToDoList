@@ -1,27 +1,45 @@
 package com.example.todolist.repository
 
-import com.example.todolist.data.CommonDateFormats
+import android.util.Log
 import com.example.todolist.data.DataSource
 import com.example.todolist.data.TodoItem
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.todolist.data.database.ItemDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asFlow
-import java.text.SimpleDateFormat
-import java.util.*
+import kotlinx.coroutines.withContext
 
 
-class TodoItemsRepository {
+class TodoItemsRepository(private val database: ItemDatabase) {
 
-    val todoItems: StateFlow<List<TodoItem>> = DataSource.todoItems
+    private val dao = database.itemDao()
 
-    fun addItem(item: TodoItem) {
-        DataSource.addItem(item)
+    val todoItems: Flow<List<TodoItem>> = dao.getItems()
+
+    suspend fun addItem(item: TodoItem) {
+        withContext(Dispatchers.IO) {
+            dao.insert(item)
+        }
     }
 
-    fun retrieveItem(id: Int): StateFlow<TodoItem>? = DataSource.retrieveItem(id)
+    suspend fun retrieveItem(id: Int): Flow<TodoItem>? {
+        return withContext(Dispatchers.IO) {
+            val res = dao.getItem(id)
+            Log.d("repository", "comleted res")
+            res
+        }
+    }
 
-    fun updateItem(item: TodoItem) = DataSource.updateItem(item)
+    suspend fun updateItem(item: TodoItem) {
+        withContext(Dispatchers.IO) {
+            dao.update(item)
+        }
+    }
 
-    fun deleteItem(itemId: Int) = DataSource.deleteItem(itemId)
+    suspend fun deleteItem(itemId: Int) {
+        withContext(Dispatchers.IO) {
+            dao.delete(itemId)
+        }
+    }
 
 }
