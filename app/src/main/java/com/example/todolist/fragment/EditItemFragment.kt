@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -20,7 +21,9 @@ import com.example.todolist.data.CommonDateFormats
 import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
 import com.example.todolist.databinding.FragmentEditItemBinding
+import com.example.todolist.viewmodel.TodoItemViewModelFactory
 import com.example.todolist.viewmodel.TodoItemsViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -33,7 +36,15 @@ class EditItemFragment : Fragment() {
 
     private var binding: FragmentEditItemBinding? = null
 
-    private val viewModel: TodoItemsViewModel by activityViewModels()
+    private val viewModel: TodoItemsViewModel by lazy {
+        val activity = requireNotNull(this.activity) {
+            "You can only access the viewModel after onActivityCreated()"
+        }
+        ViewModelProvider(
+            this,
+            TodoItemViewModelFactory(activity.application)
+        )[TodoItemsViewModel::class.java]
+    }
 
     private val args: EditItemFragmentArgs by navArgs()
 
@@ -73,6 +84,16 @@ class EditItemFragment : Fragment() {
         }
 
         binding?.delete?.isEnabled = !args.addNewItem
+
+        binding?.delete?.setOnClickListener {
+            Log.d(TAG, "before")
+            val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
+            Log.d(TAG, "right before")
+            deleteItem(item.id)
+            Log.d(TAG, "right after")
+            this@EditItemFragment.findNavController().navigateUp()
+            Log.d(TAG, "after")
+        }
     }
 
     private fun setupTopAppBarMenu(saveTaskResponse: () -> Unit) {
@@ -145,14 +166,11 @@ class EditItemFragment : Fragment() {
     }
 
     private fun determineEditOrAddItem() {
-        if (!args.addNewItem) {
-            lifecycleScope.launchWhenStarted {
-                viewModel.retrieveItem(args.itemId)?.collectLatest { selectedItem ->
-                    item = selectedItem
-                    bind(item)
-                    setupTopAppBarMenu(::updateItem)
-                }
-            }
+        val receivedItem = viewModel.retrieveItem(args.itemId)
+        if (!args.addNewItem && receivedItem != null) {
+            item = receivedItem
+            bind(item)
+            setupTopAppBarMenu(::updateItem)
         } else {
             setupTopAppBarMenu(::addNewItem)
         }
@@ -189,15 +207,12 @@ class EditItemFragment : Fragment() {
                 Log.d(TAG, "enabling datePickerSwitch")
                 pickedDate.visibility = View.VISIBLE
             }
-            delete.setOnClickListener {
-                deleteItem(itemToDisplay.id)
-                val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
-                this@EditItemFragment.findNavController().navigate(action)
-            }
+
         }
     }
 
     private fun deleteItem(itemId: Int) {
+        item = TodoItem(0, "", TaskPriority.NORMAL, false, null, 0, 0)
         viewModel.deleteItem(itemId)
     }
 
