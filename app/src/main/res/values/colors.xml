@@ -7,6 +7,7 @@
     <color name="label_tertiary">#4D000000</color>
     <color name="label_disable">#26000000</color>
     <color name="red">#FF3B30</color>
+    <color name="transparent_red">#30FF3B30</color>
     <color name="green">#34C759</color>
     <color name="blue">#007AFF</color>
     <color name="gray_light">#D1D1D6</color>
