@@ -1,14 +1,12 @@
 package com.example.todolist.adapter
 
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Paint
-import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,8 +21,8 @@ import java.lang.ref.WeakReference
 class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
     ListAdapter<TodoItem, TodoListAdapter.ItemViewHolder>(DiffCallBack) {
 
-    var onCheckDoneClick: ((TodoItem, Boolean)-> Unit)? = null
-    var onDeleteClick: ((Int)-> Unit)? = null
+    var onCheckDoneClick: ((TodoItem, Boolean) -> Unit)? = null
+    var onDeleteClick: ((Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -47,9 +45,9 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
 
         private val view = WeakReference(binding.root)
 
-        var onDeleteClick: ((Int)-> Unit)? = null
+        var onDeleteClick: ((Int) -> Unit)? = null
 
-        var onCheckDoneClick: ((TodoItem, Boolean)-> Unit)? = null
+        var onCheckDoneClick: ((TodoItem, Boolean) -> Unit)? = null
 
         init {
             view.get()?.let {
@@ -91,16 +89,21 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
                 TaskPriority.URGENT -> {
                     binding.taskImportance.setTextColor(Color.RED)
                     binding.taskImportance.visibility = View.VISIBLE
-                    binding.taskStatus.buttonTintList = ColorStateList.valueOf(Color.RED)
+                    binding.taskStatus.buttonTintList =
+                        this.itemView.context.getColorStateList(R.color.checkbox_urgency_color)
                     "!!"
                 }
                 TaskPriority.LOW -> {
                     binding.taskImportance.setTextColor(Color.GRAY)
                     binding.taskImportance.visibility = View.VISIBLE
+                    binding.taskStatus.buttonTintList =
+                        this.itemView.context.getColorStateList(R.color.checkbox_usual_color)
                     "↓"
                 }
                 else -> {
                     binding.taskImportance.visibility = View.GONE
+                    binding.taskStatus.buttonTintList =
+                        this.itemView.context.getColorStateList(R.color.checkbox_usual_color)
                     ""
                 }
             }
@@ -120,10 +123,12 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
 
             if (isDone) {
                 binding.taskDescription.isEnabled = false
-                binding.taskDescription.paintFlags = binding.taskDescription.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                binding.taskDescription.paintFlags =
+                    binding.taskDescription.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             } else {
                 binding.taskDescription.isEnabled = true
-                binding.taskDescription.paintFlags = binding.taskDescription.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                binding.taskDescription.paintFlags =
+                    binding.taskDescription.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
 //            object : CountDownTimer(1000 , 500) {
 //
