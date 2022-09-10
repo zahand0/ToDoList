@@ -24,6 +24,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
     ListAdapter<TodoItem, TodoListAdapter.ItemViewHolder>(DiffCallBack) {
 
     var onCheckDoneClick: ((TodoItem, Boolean)-> Unit)? = null
+    var onDeleteClick: ((Int)-> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -37,6 +38,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
             onItemClicked(current)
         }
         holder.onCheckDoneClick = onCheckDoneClick
+        holder.onDeleteClick = onDeleteClick
         holder.bind(current)
     }
 
@@ -45,10 +47,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
 
         private val view = WeakReference(binding.root)
 
-        var onDeleteClick: ((RecyclerView.ViewHolder)-> Unit)? = {
-//            TODO("implement item deleting")
-            binding.taskDescription.text = "DELETED"
-        }
+        var onDeleteClick: ((Int)-> Unit)? = null
 
         var onCheckDoneClick: ((TodoItem, Boolean)-> Unit)? = null
 
@@ -56,13 +55,6 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
             view.get()?.let {
                 if (it.scrollX != 0) {
                     it.scrollTo(0, 0)
-                }
-                binding.deleteButton.setOnClickListener {
-
-                    onDeleteClick?.let { onDeleteClick ->
-                        onDeleteClick(this)
-                    }
-
                 }
                 binding.checkDone.setOnClickListener {
 
@@ -86,6 +78,12 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
                 changeStatus(item, b)
                 Log.d("adapter", "setOnCheckedChangeListener call")
             }
+            binding.deleteButton.setOnClickListener {
+                onDeleteClick?.let { onDeleteClick ->
+                    onDeleteClick(item.id)
+                }
+            }
+
         }
 
         private fun setImportance(priority: TaskPriority) {

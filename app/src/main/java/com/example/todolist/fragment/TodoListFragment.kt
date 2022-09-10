@@ -53,6 +53,7 @@ class TodoListFragment : Fragment() {
             this.findNavController().navigate(action)
         }
         adapter.onCheckDoneClick = viewModel::changeStatus
+        adapter.onDeleteClick = viewModel::deleteItem
 
         binding?.recyclerView?.adapter = adapter
 
