@@ -8,8 +8,10 @@ import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
 import com.example.todolist.data.database.ItemDatabase
 import com.example.todolist.repository.TodoItemsRepository
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class TodoItemsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -78,6 +80,17 @@ class TodoItemsViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             repository.updateItem(item)
         }
+    }
+
+    fun updateItem(item: TodoItem) {
+        viewModelScope.launch {
+            repository.updateItem(item)
+        }
+    }
+
+    fun changeStatus(item: TodoItem, status: Boolean) {
+        val newItem = item.copy(isDone = status)
+        updateItem(newItem)
     }
 
     fun deleteItem(itemId: Int) {

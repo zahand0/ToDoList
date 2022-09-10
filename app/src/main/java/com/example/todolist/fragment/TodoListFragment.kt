@@ -52,7 +52,7 @@ class TodoListFragment : Fragment() {
                 TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment(false, it.id)
             this.findNavController().navigate(action)
         }
-//        adapter.submitList(viewModel.allItems.value)
+        adapter.onCheckDoneClick = viewModel::changeStatus
 
         binding?.recyclerView?.adapter = adapter
 

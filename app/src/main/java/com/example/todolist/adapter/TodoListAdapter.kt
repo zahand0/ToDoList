@@ -3,6 +3,8 @@ package com.example.todolist.adapter
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Paint
+import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +23,7 @@ import java.lang.ref.WeakReference
 class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
     ListAdapter<TodoItem, TodoListAdapter.ItemViewHolder>(DiffCallBack) {
 
+    var onCheckDoneClick: ((TodoItem, Boolean)-> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -33,6 +36,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
         holder.itemView.setOnClickListener {
             onItemClicked(current)
         }
+        holder.onCheckDoneClick = onCheckDoneClick
         holder.bind(current)
     }
 
@@ -46,9 +50,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
             binding.taskDescription.text = "DELETED"
         }
 
-        var onCheckDoneClick: ((RecyclerView.ViewHolder)-> Unit)? = {
-            setCheckStatus(true)
-        }
+        var onCheckDoneClick: ((TodoItem, Boolean)-> Unit)? = null
 
         init {
             view.get()?.let {
@@ -65,15 +67,13 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
                 binding.checkDone.setOnClickListener {
 
                     onCheckDoneClick?.let { onCheckDoneClick ->
-                        onCheckDoneClick(this)
+//                        onCheckDoneClick(this)
                     }
 
                 }
 
             }
-            binding.taskStatus.setOnCheckedChangeListener { compoundButton, b ->
-                setCheckStatus(b)
-            }
+
         }
 
         fun bind(item: TodoItem) {
@@ -81,6 +81,11 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
             binding.taskDescription.text = item.description
             setCheckStatus(item.isDone)
             setImportance(item.priority)
+            Log.d("adapter", "bind call")
+            binding.taskStatus.setOnCheckedChangeListener { compoundButton, b ->
+                changeStatus(item, b)
+                Log.d("adapter", "setOnCheckedChangeListener call")
+            }
         }
 
         private fun setImportance(priority: TaskPriority) {
@@ -103,7 +108,16 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
             }
         }
 
+        private fun changeStatus(item: TodoItem, isDone: Boolean) {
+//            setCheckStatus(isDone)
+            onCheckDoneClick?.let { it(item, isDone) }
+
+
+        }
+
         private fun setCheckStatus(isDone: Boolean) {
+
+
             binding.taskStatus.isChecked = isDone
 
             if (isDone) {
@@ -113,6 +127,16 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
                 binding.taskDescription.isEnabled = true
                 binding.taskDescription.paintFlags = binding.taskDescription.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
+//            object : CountDownTimer(1000 , 500) {
+//
+//                override fun onTick(millisUntilFinished: Long) {
+//                    binding.taskStatus.isEnabled = false
+//                }
+//
+//                override fun onFinish() {
+//                    binding.taskStatus.isEnabled = true
+//                }
+//            }.start()
         }
 
         private fun setDeadlineDate(deadlineDate: Long?) {
