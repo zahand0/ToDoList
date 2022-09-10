@@ -15,6 +15,7 @@ class TodoItemsRepository(private val database: ItemDatabase) {
     private val dao = database.itemDao()
 
     val todoItems: Flow<List<TodoItem>> = dao.getItems()
+    val todoItemsUndone: Flow<List<TodoItem>> = dao.getUndoneItems()
 
     suspend fun addItem(item: TodoItem) {
         withContext(Dispatchers.IO) {
@@ -39,6 +40,12 @@ class TodoItemsRepository(private val database: ItemDatabase) {
     suspend fun deleteItem(itemId: Int) {
         withContext(Dispatchers.IO) {
             dao.delete(itemId)
+        }
+    }
+
+    suspend fun getNumberDoneItems():Flow<Int> {
+        return withContext(Dispatchers.IO) {
+            dao.getNumberDoneItems()
         }
     }
 

@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.ImageButton
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,14 +17,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.adapter.TodoListAdapter
+import com.example.todolist.data.SettingsDataStore
 import com.example.todolist.databinding.FragmentTodoListBinding
 import com.example.todolist.viewmodel.TodoItemViewModelFactory
 import com.example.todolist.viewmodel.TodoItemsViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class TodoListFragment : Fragment() {
 
     private var binding: FragmentTodoListBinding? = null
+
+    private var showDoneTasks = true
+
+    private lateinit var settingsDataStore: SettingsDataStore
 
     private val viewModel: TodoItemsViewModel by lazy {
         val activity = requireNotNull(this.activity) {
@@ -57,12 +65,23 @@ class TodoListFragment : Fragment() {
 
         binding?.recyclerView?.adapter = adapter
 
-        // display all tasks
-        lifecycleScope.launchWhenStarted {
-            viewModel.allItems.collectLatest {
-                adapter.submitList(it)
+        chooseTaskList()
+        setIcon(binding?.showDoneTasks)
+        settingsDataStore = SettingsDataStore(requireContext())
+        settingsDataStore.preferenceFlow.asLiveData().observe(viewLifecycleOwner) { value ->
+            if (value != showDoneTasks) {
+                showDoneTasks = value
+                setIcon(binding?.showDoneTasks)
+                chooseTaskList()
             }
         }
+
+        // display all tasks
+//        lifecycleScope.launchWhenStarted {
+//            viewModel.allItems.collectLatest {
+//                adapter.submitList(it)
+//            }
+//        }
 
         // display number of done tasks in top app bar
         lifecycleScope.launchWhenStarted {
@@ -78,7 +97,14 @@ class TodoListFragment : Fragment() {
         }
 
         binding?.showDoneTasks?.setOnClickListener {
-            Toast.makeText(requireContext(), "Hide done tasks", Toast.LENGTH_SHORT).show()
+            showDoneTasks = !showDoneTasks
+            // Sets layout and icon
+            chooseTaskList()
+            setIcon(binding?.showDoneTasks)
+
+            lifecycleScope.launch {
+                settingsDataStore.saveLayoutToPreferenceStore(showDoneTasks, requireContext())
+            }
         }
 
 //          binding?.doneTasks?.visibility = View.INVISIBLE
@@ -94,6 +120,32 @@ class TodoListFragment : Fragment() {
 
         setItemTouchHelper()
     }
+
+    // show all tasks or only undone tasks
+    private fun chooseTaskList() {
+        val adapter = binding?.recyclerView?.adapter as TodoListAdapter
+
+        if (showDoneTasks) {
+            viewModel.allItems.asLiveData().observe(viewLifecycleOwner) {
+                adapter.submitList(it)
+            }
+        } else {
+            viewModel.undoneItems.asLiveData().observe(viewLifecycleOwner) {
+                adapter.submitList(it)
+            }
+        }
+
+
+    }
+
+    private fun setIcon(button: ImageButton?) {
+        button?.setImageDrawable(
+            if (showDoneTasks)
+                ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_eye)
+            else ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_eye_off)
+        )
+    }
+
 
     private fun setItemTouchHelper() {
         ItemTouchHelper(object : ItemTouchHelper.Callback() {

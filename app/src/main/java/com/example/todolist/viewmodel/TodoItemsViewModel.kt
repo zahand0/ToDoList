@@ -21,8 +21,11 @@ class TodoItemsViewModel(application: Application) : AndroidViewModel(applicatio
     val allItems: StateFlow<List<TodoItem>> =
         repository.todoItems.stateIn(viewModelScope, SharingStarted.Lazily, listOf())
 
-    val _doneTasks = MutableStateFlow(getDoneTasksCount(allItems.value))
-    val doneTasks = _doneTasks.asStateFlow()
+    val undoneItems: StateFlow<List<TodoItem>> =
+        repository.todoItemsUndone.stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+
+    private val _doneTasks = getDoneTasksCount().stateIn(viewModelScope, SharingStarted.Lazily, 0)
+    val doneTasks = _doneTasks
 
 
     fun addItem(
@@ -99,7 +102,9 @@ class TodoItemsViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    private fun getDoneTasksCount(tasksList: List<TodoItem>): Int {
-        return tasksList.filter { it.isDone }.size
+    private fun getDoneTasksCount(): Flow<Int> {
+        return runBlocking(Dispatchers.IO) {
+            repository.getNumberDoneItems().stateIn(viewModelScope, SharingStarted.Lazily, 0)
+        }
     }
 }
