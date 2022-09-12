@@ -8,7 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,16 +68,9 @@ class TodoListFragment : Fragment() {
 
         binding?.recyclerView?.adapter = adapter
 
-        chooseTaskList()
+//        chooseTaskList()
         setIcon(binding?.showDoneTasks)
-        settingsDataStore = SettingsDataStore(requireContext())
-        settingsDataStore.preferenceFlow.asLiveData().observe(viewLifecycleOwner) { value ->
-            if (value != showDoneTasks) {
-                showDoneTasks = value
-                setIcon(binding?.showDoneTasks)
-                chooseTaskList()
-            }
-        }
+
 
         // display number of done tasks in top app bar
         lifecycleScope.launchWhenStarted {
@@ -96,17 +92,28 @@ class TodoListFragment : Fragment() {
         }
 
         binding?.showDoneTasks?.setOnClickListener {
-            showDoneTasks = !showDoneTasks
-            // Sets layout and icon
-            chooseTaskList()
-            setIcon(binding?.showDoneTasks)
+//            showDoneTasks = !showDoneTasks
+//            // Sets layout and icon
+//            chooseTaskList()
+//            setIcon(binding?.showDoneTasks)
 
             lifecycleScope.launch {
-                settingsDataStore.saveLayoutToPreferenceStore(showDoneTasks, requireContext())
+                settingsDataStore.saveLayoutToPreferenceStore(!showDoneTasks, requireContext())
             }
         }
 
-//          binding?.doneTasks?.visibility = View.INVISIBLE
+        settingsDataStore = SettingsDataStore(requireContext())
+        settingsDataStore.preferenceFlow
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .onEach { value ->
+                showDoneTasks = value
+                setIcon(binding?.showDoneTasks)
+                chooseTaskList()
+
+            }
+            .launchIn(lifecycleScope)
+
+
         // wrap/unwrap top app bar
         binding?.appBarLayout?.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
 
@@ -124,23 +131,14 @@ class TodoListFragment : Fragment() {
     private fun chooseTaskList() {
         val adapter = binding?.recyclerView?.adapter as TodoListAdapter
 
-        if (showDoneTasks) {
-            viewModel.allItems
-                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                .onEach {
-                    adapter.submitList(it)
-                }
-                .launchIn(lifecycleScope)
-
-        } else {
-            viewModel.undoneItems
-                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                .onEach {
-                    adapter.submitList(it)
-                }
-                .launchIn(lifecycleScope)
-        }
-
+        viewModel.allItems
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .onEach {
+                adapter.submitList(
+                    if (showDoneTasks) it else it.filter { item -> !item.isDone }
+                )
+            }
+            .launchIn(lifecycleScope)
 
     }
 
