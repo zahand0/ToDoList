@@ -55,7 +55,7 @@
                         android:id="@+id/description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
+                        android:inputType="textCapSentences"
                         android:gravity="start"
                         android:hint="@string/task_description_hint"
                         android:minHeight="100dp"
