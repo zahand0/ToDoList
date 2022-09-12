@@ -5,99 +5,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="48dp"
-    >
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/task"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
-    <CheckBox
-        android:id="@+id/task_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:buttonTint="@color/green"
-        android:checked="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:minHeight="48dp">
 
-    <TextView
-        android:id="@+id/task_importance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="12dp"
-        android:paddingEnd="8dp"
-
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/label_primary"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/task_status"
-        app:layout_constraintTop_toTopOf="@id/task_description"
-        tools:ignore="RtlSymmetry"
-        android:visibility="gone"
-        tools:text="!!" />
-
-    <TextView
-        android:id="@+id/task_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:paddingTop="12dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@id/info"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/task_importance"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Play some games with new fancy wired gamepad with xbox logo on it" />
-
-    <FrameLayout
-        android:layout_width="1000dp"
-        android:layout_height="wrap_content"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@id/info"
-        app:layout_constraintStart_toEndOf="@id/task_importance"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/task_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/label_tertiary"
-        android:textSize="@dimen/secondaryTextSize"
-        app:layout_constraintStart_toEndOf="@id/task_status"
-        app:layout_constraintTop_toBottomOf="@id/task_description"
-        tools:text="date" />
-
-    <FrameLayout
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/task"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <CheckBox
+            android:id="@+id/task_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:buttonTint="@color/green"
+            android:checked="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="8dp"
-            android:contentDescription="@string/task_info"
+        <TextView
+            android:id="@+id/task_importance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingEnd="8dp"
 
-            app:srcCompat="@drawable/ic_info"
-            app:tint="@color/label_tertiary" />
-    </FrameLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/label_primary"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/task_status"
+            app:layout_constraintTop_toTopOf="@id/task_description"
+            tools:ignore="RtlSymmetry"
+            tools:text="!!" />
 
+        <TextView
+            android:id="@+id/task_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:paddingTop="12dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/info"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/task_importance"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Play some games with new fancy wired gamepad with xbox logo on it" />
+
+        <FrameLayout
+            android:layout_width="1000dp"
+            android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/info"
+            app:layout_constraintStart_toEndOf="@id/task_importance"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/task_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/label_tertiary"
+            android:textSize="@dimen/secondaryTextSize"
+            app:layout_constraintStart_toEndOf="@id/task_status"
+            app:layout_constraintTop_toBottomOf="@id/task_description"
+            tools:text="date" />
+
+        <FrameLayout
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="@string/task_info"
+
+                app:srcCompat="@drawable/ic_info"
+                app:tint="@color/label_tertiary" />
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <FrameLayout
@@ -123,7 +123,7 @@
         android:id="@+id/check_done"
         android:layout_width="@dimen/swipeButtonWidth"
         android:layout_height="0dp"
-
+        android:layout_marginEnd="1dp"
         android:background="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/task"
@@ -134,7 +134,6 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center_horizontal|center_vertical"
-
 
 
             app:srcCompat="@drawable/ic_done"
