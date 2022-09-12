@@ -11,6 +11,7 @@
     <string name="delete">Delete</string>
     <string name="show_done_tasks">Show done tasks</string>
     <string name="deadline">Deadline is:</string>
+    <string name="add_new_task">New task</string>
 
     <string-array name="priority_array">
         <item>None</item>
