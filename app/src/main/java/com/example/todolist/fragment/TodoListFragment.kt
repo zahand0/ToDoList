@@ -90,8 +90,14 @@ class TodoListFragment : Fragment() {
             }
         }
 
+        // add new task button click behavior
         binding?.recyclerView?.layoutManager = LinearLayoutManager(this.context)
         binding?.addNewTask?.setOnClickListener {
+            val action = TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment()
+            this.findNavController().navigate(action)
+        }
+        // new task textview click behavior
+        binding?.newTaskTextview?.setOnClickListener {
             val action = TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment()
             this.findNavController().navigate(action)
         }
