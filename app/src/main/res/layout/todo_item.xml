@@ -6,11 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="48dp"
-
     >
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/task"
-    android:layout_width="378dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -55,6 +54,14 @@
         app:layout_constraintStart_toEndOf="@id/task_importance"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Play some games with new fancy wired gamepad with xbox logo on it" />
+
+    <FrameLayout
+        android:layout_width="1000dp"
+        android:layout_height="wrap_content"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/info"
+        app:layout_constraintStart_toEndOf="@id/task_importance"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/task_date"
