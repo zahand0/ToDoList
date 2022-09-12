@@ -1,10 +1,14 @@
 package com.example.todolist.fragment
 
 import android.graphics.Canvas
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -68,10 +72,6 @@ class TodoListFragment : Fragment() {
 
         binding?.recyclerView?.adapter = adapter
 
-//        chooseTaskList()
-        setIcon(binding?.showDoneTasks)
-
-
         // display number of done tasks in top app bar
         lifecycleScope.launchWhenStarted {
             viewModel.doneTasks.collectLatest {
@@ -92,11 +92,6 @@ class TodoListFragment : Fragment() {
         }
 
         binding?.showDoneTasks?.setOnClickListener {
-//            showDoneTasks = !showDoneTasks
-//            // Sets layout and icon
-//            chooseTaskList()
-//            setIcon(binding?.showDoneTasks)
-
             lifecycleScope.launch {
                 settingsDataStore.saveLayoutToPreferenceStore(!showDoneTasks, requireContext())
             }
