@@ -2,18 +2,19 @@ package com.example.todolist.fragment
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
@@ -23,11 +24,10 @@ import com.example.todolist.data.TodoItem
 import com.example.todolist.databinding.FragmentEditItemBinding
 import com.example.todolist.viewmodel.TodoItemViewModelFactory
 import com.example.todolist.viewmodel.TodoItemsViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 const val TAG = "EditItemFragment"
 
@@ -94,6 +94,7 @@ class EditItemFragment : Fragment() {
             this@EditItemFragment.findNavController().navigateUp()
             Log.d(TAG, "after")
         }
+
     }
 
     private fun setupTopAppBarMenu(saveTaskResponse: () -> Unit) {
@@ -173,6 +174,12 @@ class EditItemFragment : Fragment() {
             setupTopAppBarMenu(::updateItem)
         } else {
             setupTopAppBarMenu(::addNewItem)
+            // set focus on editText
+            binding?.description?.requestFocus()
+            // show keyboard
+            val imm: InputMethodManager? =
+                getSystemService(requireContext(), InputMethodManager::class.java)
+            imm?.showSoftInput(binding?.description, InputMethodManager.SHOW_IMPLICIT)
         }
     }
 
