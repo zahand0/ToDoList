@@ -125,12 +125,12 @@ class TodoListFragment : Fragment() {
     // show all tasks or only undone tasks
     private fun chooseTaskList() {
         val adapter = binding?.recyclerView?.adapter as TodoListAdapter
-
         viewModel.allItems
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .onEach {
                 adapter.submitList(
                     if (showDoneTasks) it else it.filter { item -> !item.isDone }
+
                 )
             }
             .launchIn(lifecycleScope)

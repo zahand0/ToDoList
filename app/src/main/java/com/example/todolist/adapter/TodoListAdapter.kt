@@ -55,7 +55,6 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
                     it.scrollTo(0, 0)
                 }
                 binding.checkDone.setOnClickListener {
-
                     onCheckDoneClick?.let { onCheckDoneClick ->
 //                        onCheckDoneClick(this)
                     }
@@ -75,7 +74,9 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
 
             binding.taskStatus.setOnCheckedChangeListener { compoundButton, b ->
                 changeStatus(item, b)
-//                Log.d("adapter", "setOnCheckedChangeListener call")
+            }
+            binding.checkDone.setOnClickListener {
+                changeStatus(item, true)
             }
             setCheckStatus(item.isDone)
 
@@ -113,10 +114,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
         }
 
         private fun changeStatus(item: TodoItem, isDone: Boolean) {
-//            setCheckStatus(isDone)
             onCheckDoneClick?.let { it(item, isDone) }
-
-
         }
 
         private fun setCheckStatus(isDone: Boolean) {
@@ -133,16 +131,6 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
                 binding.taskDescription.paintFlags =
                     binding.taskDescription.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
-//            object : CountDownTimer(1000 , 500) {
-//
-//                override fun onTick(millisUntilFinished: Long) {
-//                    binding.taskStatus.isEnabled = false
-//                }
-//
-//                override fun onFinish() {
-//                    binding.taskStatus.isEnabled = true
-//                }
-//            }.start()
         }
 
         private fun setDeadlineDate(deadlineDate: Long?) {
