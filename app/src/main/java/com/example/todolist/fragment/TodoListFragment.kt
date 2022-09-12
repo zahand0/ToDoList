@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +20,8 @@ import com.example.todolist.databinding.FragmentTodoListBinding
 import com.example.todolist.viewmodel.TodoItemViewModelFactory
 import com.example.todolist.viewmodel.TodoItemsViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class TodoListFragment : Fragment() {
@@ -76,13 +76,6 @@ class TodoListFragment : Fragment() {
             }
         }
 
-        // display all tasks
-//        lifecycleScope.launchWhenStarted {
-//            viewModel.allItems.collectLatest {
-//                adapter.submitList(it)
-//            }
-//        }
-
         // display number of done tasks in top app bar
         lifecycleScope.launchWhenStarted {
             viewModel.doneTasks.collectLatest {
@@ -132,13 +125,20 @@ class TodoListFragment : Fragment() {
         val adapter = binding?.recyclerView?.adapter as TodoListAdapter
 
         if (showDoneTasks) {
-            viewModel.allItems.asLiveData().observe(viewLifecycleOwner) {
-                adapter.submitList(it)
-            }
+            viewModel.allItems
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .onEach {
+                    adapter.submitList(it)
+                }
+                .launchIn(lifecycleScope)
+
         } else {
-            viewModel.undoneItems.asLiveData().observe(viewLifecycleOwner) {
-                adapter.submitList(it)
-            }
+            viewModel.undoneItems
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .onEach {
+                    adapter.submitList(it)
+                }
+                .launchIn(lifecycleScope)
         }
 
 

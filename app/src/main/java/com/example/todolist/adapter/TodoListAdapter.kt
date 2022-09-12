@@ -67,15 +67,18 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
         }
 
         fun bind(item: TodoItem) {
-            setDeadlineDate(item.deadlineDate)
+
             binding.taskDescription.text = item.description
-            setCheckStatus(item.isDone)
+            setDeadlineDate(item.deadlineDate)
             setImportance(item.priority)
             Log.d("adapter", "bind call")
+
             binding.taskStatus.setOnCheckedChangeListener { compoundButton, b ->
                 changeStatus(item, b)
-                Log.d("adapter", "setOnCheckedChangeListener call")
+//                Log.d("adapter", "setOnCheckedChangeListener call")
             }
+            setCheckStatus(item.isDone)
+
             binding.deleteButton.setOnClickListener {
                 onDeleteClick?.let { onDeleteClick ->
                     onDeleteClick(item.id)
@@ -145,7 +148,9 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
         private fun setDeadlineDate(deadlineDate: Long?) {
             if (deadlineDate == null) {
                 binding.taskDate.visibility = View.GONE
+                Log.d("adapter", "deadline is null!")
             } else {
+                binding.taskDate.visibility = View.VISIBLE
                 binding.taskDate.text = msecToDate(deadlineDate, CommonDateFormats.DIGIT_DATE)
             }
         }

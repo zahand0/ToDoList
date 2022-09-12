@@ -18,11 +18,11 @@ class TodoItemsViewModel(application: Application) : AndroidViewModel(applicatio
     private val repository = TodoItemsRepository(ItemDatabase.getDatabase(application))
 
 
-    val allItems: StateFlow<List<TodoItem>> =
-        repository.todoItems.stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+    val allItems: Flow<List<TodoItem>> =
+        repository.todoItems
 
-    val undoneItems: StateFlow<List<TodoItem>> =
-        repository.todoItemsUndone.stateIn(viewModelScope, SharingStarted.Lazily, listOf())
+    val undoneItems: Flow<List<TodoItem>> =
+        repository.todoItemsUndone
 
     private val _doneTasks = getDoneTasksCount().stateIn(viewModelScope, SharingStarted.Lazily, 0)
     val doneTasks = _doneTasks
