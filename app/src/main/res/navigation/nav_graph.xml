@@ -10,6 +10,10 @@
         android:name="com.example.todolist.fragment.TodoListFragment"
         android:label="fragment_todo_list"
         tools:layout="@layout/fragment_todo_list" >
+        <argument
+            android:name="scroll_all_way_down"
+            app:argType="boolean"
+            android:defaultValue="false"/>
         <action
             android:id="@+id/action_todoListFragment_to_editItemFragment"
             app:destination="@id/editItemFragment" />
