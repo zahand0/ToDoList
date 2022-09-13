@@ -4,7 +4,7 @@
 
 ### Currently implemented:
 
-<table style="margin-left=auto;margin-right=auto;">
+<table>
  <tr>
     <th><b style="font-size:500px">Task completion mark</b></th>
     <th><b style="font-size:50px">Editing/deleting tasks</b></th>
@@ -15,7 +15,7 @@
  </tr>
  </table>
  
- <table cellspacing="0" cellpadding="0">
+ <table>
  <tr>
     <th><b style="font-size:50px">Adding new tasks</b></th>
     <th><b style="font-size:50px">Hiding/showing completed tasks</b></th>
@@ -28,9 +28,13 @@
 
 ### Implemented dark/light theme
 
-![Screenshot_20220913-151910](https://user-images.githubusercontent.com/103197485/189939273-30c5ee97-3789-4ffe-b066-9a70a26ae9de.png)
-![Screenshot_20220913-151919](https://user-images.githubusercontent.com/103197485/189939279-023f059d-daea-4f5c-b336-0ad755d96a86.png)
-
-![Screenshot_20220913-152009](https://user-images.githubusercontent.com/103197485/189939283-c4813ad1-41c4-4054-ad1a-caadcafda921.png)
-![Screenshot_20220913-152044](https://user-images.githubusercontent.com/103197485/189939284-29d6682f-5bbc-48ee-b23d-1acacfda7247.png)
-
+ <table>
+ <tr>
+    <td><img src="https://user-images.githubusercontent.com/103197485/189939273-30c5ee97-3789-4ffe-b066-9a70a26ae9de.png" /></td>
+    <td><img src="https://user-images.githubusercontent.com/103197485/189939279-023f059d-daea-4f5c-b336-0ad755d96a86.png" /></td>
+ </tr>
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/103197485/189939283-c4813ad1-41c4-4054-ad1a-caadcafda921.png" /></td>
+    <td><img src="https://user-images.githubusercontent.com/103197485/189939284-29d6682f-5bbc-48ee-b23d-1acacfda7247.png" /></td>
+ </tr>
+</table>
