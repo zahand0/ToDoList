@@ -10,6 +10,7 @@
     <color name="transparent_red">#30FF453A</color>
     <color name="green">#32D74B</color>
     <color name="blue">#0A84FF</color>
+    <color name="light_blue">#600A84FF</color>
     <color name="gray_light">#48484A</color>
     <color name="back_primary">#161618</color>
     <color name="back_secondary">#252528</color>
