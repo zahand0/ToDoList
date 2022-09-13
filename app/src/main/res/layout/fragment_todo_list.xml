@@ -12,8 +12,8 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        app:elevation="20dp"
         android:background="@color/back_primary"
+        app:elevation="20dp"
         app:liftOnScroll="true">
 
 
@@ -88,30 +88,36 @@
         app:cardElevation="4dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/todo_list_nested_scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:itemCount="2"
-                tools:listitem="@layout/todo_item" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/new_task_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="48dp"
-                android:paddingVertical="16dp"
-                android:text="@string/add_new_task"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/label_tertiary" />
-        </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    tools:itemCount="2"
+                    tools:listitem="@layout/todo_item" />
+
+                <TextView
+                    android:id="@+id/new_task_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="48dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/add_new_task"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/label_tertiary" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
 
     </com.google.android.material.card.MaterialCardView>
 
