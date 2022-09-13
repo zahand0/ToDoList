@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="160dp"
         app:elevation="20dp"
-
+        android:background="@color/back_primary"
         app:liftOnScroll="true">
 
 
