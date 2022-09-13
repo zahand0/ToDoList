@@ -91,7 +91,7 @@ class EditItemFragment : Fragment() {
             Log.d(TAG, "right before")
             deleteItem(item.id)
             Log.d(TAG, "right after")
-            this@EditItemFragment.findNavController().navigateUp()
+            this@EditItemFragment.findNavController().navigate(action)
             Log.d(TAG, "after")
         }
 
@@ -123,9 +123,10 @@ class EditItemFragment : Fragment() {
                     Calendar.getInstance().timeInMillis
                 )
             }
+            val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment(true)
+            this.findNavController().navigate(action)
         }
-        val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
-        this.findNavController().navigate(action)
+
     }
 
     @SuppressLint("SimpleDateFormat")
