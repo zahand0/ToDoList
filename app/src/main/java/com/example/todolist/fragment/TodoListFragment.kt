@@ -1,14 +1,13 @@
 package com.example.todolist.fragment
 
+import android.content.res.Resources
 import android.graphics.Canvas
-import android.graphics.PorterDuff
+import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -17,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +38,8 @@ class TodoListFragment : Fragment() {
     private var showDoneTasks = true
 
     private lateinit var settingsDataStore: SettingsDataStore
+
+    private val args: TodoListFragmentArgs by navArgs()
 
     private val viewModel: TodoItemsViewModel by lazy {
         val activity = requireNotNull(this.activity) {
@@ -117,9 +119,49 @@ class TodoListFragment : Fragment() {
 
         }
 
+        // if created new task scroll to bottom of fragment
+        if (args.scrollAllWayDown) {
+            binding?.todoListNestedScrollView?.postDelayed(
+                {
 
+                    if (!isVisible(binding?.newTaskTextview)) {
+                        binding?.appBarLayout?.setExpanded(false)
+                    }
+
+                    binding?.todoListNestedScrollView?.fullScroll(View.FOCUS_DOWN)
+                },
+                200
+            )
+
+            Log.d("fragment", "scroll DOWN!!!")
+        }
 
         setItemTouchHelper()
+    }
+
+    private fun isVisible(view: View?): Boolean {
+        if (view == null) {
+            return false
+        }
+        if (!view.isShown) {
+            return false
+        }
+        val actualPosition = Rect()
+
+        view.getGlobalVisibleRect(actualPosition)
+        Log.d("fragment", "actual ${actualPosition.left} ${actualPosition.top} ${actualPosition.right} ${actualPosition.bottom}")
+        Log.d("fragment", "screen 0 0 ${ getScreenWidth()} ${getScreenHeight()}")
+        val screen = Rect(0, 0, getScreenWidth(), getScreenHeight())
+        Log.d("fragment", "VISIBLE!!! ${actualPosition.top < screen.bottom}")
+        return actualPosition.bottom + 100 < screen.bottom
+    }
+
+    private fun getScreenWidth(): Int {
+        return Resources.getSystem().displayMetrics.widthPixels
+    }
+
+    private fun getScreenHeight(): Int {
+        return Resources.getSystem().displayMetrics.heightPixels
     }
 
     // show all tasks or only undone tasks
