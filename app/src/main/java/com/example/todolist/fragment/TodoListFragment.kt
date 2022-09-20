@@ -136,6 +136,8 @@ class TodoListFragment : Fragment() {
             Log.d("fragment", "scroll DOWN!!!")
         }
 
+        binding?.refreshButton?.setOnClickListener { viewModel.refreshItems() }
+
         setItemTouchHelper()
     }
 
