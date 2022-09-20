@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.todolist.network.NetworkItem
 
 @Entity(tableName = "item")
 data class TodoItem(
@@ -22,3 +23,15 @@ data class TodoItem(
     @ColumnInfo(name = "last_edit_date")
     val lastEditDate: Long
 )
+
+fun TodoItem.asNetworkItem(): NetworkItem {
+    return NetworkItem(
+        id = this.id,
+        description = this.description,
+        priority = this.priority,
+        isDone = this.isDone,
+        deadlineDate = this.deadlineDate,
+        creationDate = this.creationDate,
+        lastEditDate = this.lastEditDate
+    )
+}
