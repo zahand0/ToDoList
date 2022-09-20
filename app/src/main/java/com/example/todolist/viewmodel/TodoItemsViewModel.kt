@@ -102,6 +102,12 @@ class TodoItemsViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    fun refreshItems() {
+        viewModelScope.launch {
+            repository.refreshItems()
+        }
+    }
+
     private fun getDoneTasksCount(): Flow<Int> {
         return runBlocking(Dispatchers.IO) {
             repository.getNumberDoneItems().stateIn(viewModelScope, SharingStarted.Lazily, 0)
