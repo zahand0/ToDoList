@@ -12,6 +12,8 @@
     <string name="show_done_tasks">Show done tasks</string>
     <string name="deadline">Deadline is:</string>
     <string name="add_new_task">New task</string>
+    <string name="connection_error">Something wrong with your internet connection</string>
+    <string name="network_error">Something went wrong, try again later</string>
 
     <string-array name="priority_array">
         <item>None</item>
