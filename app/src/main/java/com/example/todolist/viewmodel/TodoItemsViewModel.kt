@@ -7,11 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
 import com.example.todolist.data.database.ItemDatabase
+import com.example.todolist.network.exception.NetworkState
 import com.example.todolist.repository.TodoItemsRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 
 class TodoItemsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -102,9 +104,16 @@ class TodoItemsViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun refreshItems() {
-        viewModelScope.launch {
-            repository.refreshItems()
+    suspend fun refreshItems(): NetworkState {
+        return withContext(viewModelScope.coroutineContext) {
+            var result = repository.refreshItems()
+            repeat(3) {
+                if (result != NetworkState.OK) {
+                    delay(500)
+                    result = repository.refreshItems()
+                } else return@repeat
+            }
+            result
         }
     }
 
