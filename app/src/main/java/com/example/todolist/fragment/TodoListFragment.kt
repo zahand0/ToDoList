@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -24,6 +25,7 @@ import com.example.todolist.R
 import com.example.todolist.adapter.TodoListAdapter
 import com.example.todolist.data.SettingsDataStore
 import com.example.todolist.databinding.FragmentTodoListBinding
+import com.example.todolist.network.exception.NetworkState
 import com.example.todolist.viewmodel.TodoItemViewModelFactory
 import com.example.todolist.viewmodel.TodoItemsViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -136,7 +138,28 @@ class TodoListFragment : Fragment() {
             Log.d("fragment", "scroll DOWN!!!")
         }
 
-        binding?.refreshButton?.setOnClickListener { viewModel.refreshItems() }
+        binding?.refreshButton?.setOnClickListener {
+            lifecycleScope.launch {
+                when (viewModel.refreshItems()) {
+                    NetworkState.CONNECTION_ERROR -> {
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.connection_error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    NetworkState.UNDEFINED_ERROR -> {
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.network_error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    NetworkState.OK -> {}
+                }
+            }
+
+        }
 
         setItemTouchHelper()
     }
@@ -151,8 +174,11 @@ class TodoListFragment : Fragment() {
         val actualPosition = Rect()
 
         view.getGlobalVisibleRect(actualPosition)
-        Log.d("fragment", "actual ${actualPosition.left} ${actualPosition.top} ${actualPosition.right} ${actualPosition.bottom}")
-        Log.d("fragment", "screen 0 0 ${ getScreenWidth()} ${getScreenHeight()}")
+        Log.d(
+            "fragment",
+            "actual ${actualPosition.left} ${actualPosition.top} ${actualPosition.right} ${actualPosition.bottom}"
+        )
+        Log.d("fragment", "screen 0 0 ${getScreenWidth()} ${getScreenHeight()}")
         val screen = Rect(0, 0, getScreenWidth(), getScreenHeight())
         Log.d("fragment", "VISIBLE!!! ${actualPosition.top < screen.bottom}")
         return actualPosition.bottom + 100 < screen.bottom
