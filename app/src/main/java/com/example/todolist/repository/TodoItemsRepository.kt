@@ -75,7 +75,7 @@ class TodoItemsRepository(private val database: ItemDatabase) {
                         is RuntimeException -> NetworkState.CONNECTION_ERROR
                         else -> NetworkState.UNDEFINED_ERROR
                     }
-                    error = it.javaClass.name
+                    error = it.localizedMessage ?: "error"
                 }
 
         }
