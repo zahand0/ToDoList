@@ -7,12 +7,15 @@ import com.example.todolist.data.database.ItemDatabase
 import com.example.todolist.network.NetworkItemContainer
 import com.example.todolist.network.api.TodoListApi.api
 import com.example.todolist.network.asDatabaseModel
+import com.example.todolist.network.exception.NetworkState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import okio.IOException
+import retrofit2.HttpException
 
-
+private const val TAG = "Repository"
 class TodoItemsRepository(private val database: ItemDatabase) {
 
     private val dao = database.itemDao()
@@ -52,25 +55,31 @@ class TodoItemsRepository(private val database: ItemDatabase) {
         }
     }
 
-    suspend fun refreshItems() {
-        try {
-            withContext(Dispatchers.IO) {
-                Log.d("repository", "sss")
+    suspend fun refreshItems(): NetworkState {
+        var result = NetworkState.UNDEFINED_ERROR
+        var error = "ok"
+        withContext(Dispatchers.IO) {
 
-                val taskList = todoItems.first().map { it.asNetworkItem() }
-                Log.d("repository", taskList[0].description)
-
-                val updatedTasks =
-                    api.updateTaskList(NetworkItemContainer(taskList)).asDatabaseModel()
-
-                Log.d("repository", updatedTasks.toString())
-                for (task in updatedTasks) {
-                    updateItem(task)
+            val taskList = todoItems.first().map { it.asNetworkItem() }
+            api.updateTaskList(NetworkItemContainer(taskList))
+                .onSuccess {
+                    for (task in it.asDatabaseModel()) {
+                        updateItem(task)
+                    }
+                    result = NetworkState.OK
+                }
+                .onFailure {
+                    result = when (it) {
+                        is HttpException -> NetworkState.UNDEFINED_ERROR
+                        is IOException -> NetworkState.CONNECTION_ERROR
+                        is RuntimeException -> NetworkState.CONNECTION_ERROR
+                        else -> NetworkState.UNDEFINED_ERROR
+                    }
+                    error = it.javaClass.name
                 }
 
-            }
-        } catch (e: Error) {
-            Log.d("repository", e.message ?: "message")
         }
+        Log.d(TAG, error)
+        return result
     }
 }
