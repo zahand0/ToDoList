@@ -8,5 +8,5 @@ import retrofit2.http.POST
 interface TodoListApiService {
     @Headers("token: 12345678")
     @POST("get_all_tasks")
-    suspend fun updateTaskList(@Body container: NetworkItemContainer): NetworkItemContainer
+    suspend fun updateTaskList(@Body container: NetworkItemContainer): Result<NetworkItemContainer>
 }
