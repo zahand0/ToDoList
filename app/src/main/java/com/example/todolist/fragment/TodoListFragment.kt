@@ -138,7 +138,7 @@ class TodoListFragment : Fragment() {
             Log.d("fragment", "scroll DOWN!!!")
         }
 
-        binding?.refreshButton?.setOnClickListener {
+        binding?.swiperefresh?.setOnRefreshListener {
             lifecycleScope.launch {
                 when (viewModel.refreshItems()) {
                     NetworkState.CONNECTION_ERROR -> {
@@ -157,8 +157,8 @@ class TodoListFragment : Fragment() {
                     }
                     NetworkState.OK -> {}
                 }
+                binding?.swiperefresh?.isRefreshing = false
             }
-
         }
 
         setItemTouchHelper()
