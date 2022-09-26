@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-const val TAG = "EditItemFragment"
+private const val TAG = "EditItemFragment"
 
 class EditItemFragment : Fragment() {
 
