@@ -1,4 +1,4 @@
-package com.example.todolist.fragment
+package com.example.todolist.ui
 
 import android.content.res.Resources
 import android.graphics.Canvas
@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
-import com.example.todolist.adapter.TodoListAdapter
 import com.example.todolist.data.SettingsDataStore
 import com.example.todolist.databinding.FragmentTodoListBinding
 import com.example.todolist.network.exception.NetworkState

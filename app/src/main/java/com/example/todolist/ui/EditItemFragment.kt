@@ -1,8 +1,7 @@
-package com.example.todolist.fragment
+package com.example.todolist.ui
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
