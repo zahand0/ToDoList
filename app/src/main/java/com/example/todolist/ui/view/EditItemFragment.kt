@@ -21,17 +21,18 @@ import com.example.todolist.data.CommonDateFormats
 import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
 import com.example.todolist.databinding.FragmentEditItemBinding
-import com.example.todolist.viewmodel.TodoItemViewModelFactory
-import com.example.todolist.viewmodel.TodoItemsViewModel
+import com.example.todolist.ui.stateholders.TodoItemViewModelFactory
+import com.example.todolist.ui.stateholders.TodoItemsViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-private const val TAG = "EditItemFragment"
-
 class EditItemFragment : Fragment() {
 
+    companion object {
+        private const val TAG = "EditItemFragment"
+    }
 
     private var binding: FragmentEditItemBinding? = null
 
@@ -46,6 +47,9 @@ class EditItemFragment : Fragment() {
     }
 
     private val args: EditItemFragmentArgs by navArgs()
+
+    private val isNewTask
+        get() = args.itemId == -1
 
     private lateinit var item: TodoItem
 
@@ -82,7 +86,7 @@ class EditItemFragment : Fragment() {
             this.findNavController().navigate(action)
         }
 
-        binding?.delete?.isEnabled = !args.addNewItem
+        binding?.delete?.isEnabled = !isNewTask
 
         binding?.delete?.setOnClickListener {
             Log.d(TAG, "before")
@@ -110,7 +114,7 @@ class EditItemFragment : Fragment() {
 
     @SuppressLint("SimpleDateFormat")
     private fun addNewItem() {
-        if (args.addNewItem) {
+        if (isNewTask) {
             binding?.let {
                 val deadlineDate: Long? = getDeadlineDate()
                 viewModel.addItem(
@@ -168,7 +172,7 @@ class EditItemFragment : Fragment() {
 
     private fun determineEditOrAddItem() {
         val receivedItem = viewModel.retrieveItem(args.itemId)
-        if (!args.addNewItem && receivedItem != null) {
+        if (!isNewTask && receivedItem != null) {
             item = receivedItem
             bind(item)
             setupTopAppBarMenu(::updateItem)
