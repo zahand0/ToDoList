@@ -1,4 +1,4 @@
-package com.example.todolist.viewmodel
+package com.example.todolist.ui.stateholders
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/todoListFragment"
-        android:name="com.example.todolist.ui.TodoListFragment"
+        android:name="com.example.todolist.ui.view.TodoListFragment"
         android:label="fragment_todo_list"
         tools:layout="@layout/fragment_todo_list" >
         <argument
@@ -20,17 +20,12 @@
     </fragment>
     <fragment
         android:id="@+id/editItemFragment"
-        android:name="com.example.todolist.ui.EditItemFragment"
+        android:name="com.example.todolist.ui.view.EditItemFragment"
         android:label="fragment_edit_item"
         tools:layout="@layout/fragment_edit_item" >
         <argument
-            android:name="add_new_item"
-            app:argType="boolean"
-            android:defaultValue="true"/>
-        <argument
             android:name="item_id"
-            app:argType="integer"
-            android:defaultValue="-1"/>
+            app:argType="integer" />
         <action
             android:id="@+id/action_editItemFragment_to_todoListFragment"
             app:destination="@id/todoListFragment"

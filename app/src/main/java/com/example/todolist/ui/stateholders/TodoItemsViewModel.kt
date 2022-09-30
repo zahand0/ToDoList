@@ -1,4 +1,4 @@
-package com.example.todolist.viewmodel
+package com.example.todolist.ui.stateholders
 
 import android.app.Application
 import android.util.Log
@@ -29,6 +29,9 @@ class TodoItemsViewModel(application: Application) : AndroidViewModel(applicatio
     private val _doneTasks = getDoneTasksCount().stateIn(viewModelScope, SharingStarted.Lazily, 0)
     val doneTasks = _doneTasks
 
+    private var _lastRefreshStatus: NetworkState = NetworkState.OK
+    val lastRefreshStatus: NetworkState
+        get() = _lastRefreshStatus
 
     fun addItem(
         description: String,
@@ -104,8 +107,8 @@ class TodoItemsViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    suspend fun refreshItems(): NetworkState {
-        return withContext(viewModelScope.coroutineContext) {
+    suspend fun refreshItems() {
+        withContext(viewModelScope.coroutineContext) {
             var result = repository.refreshItems()
             repeat(3) {
                 if (result != NetworkState.OK) {
@@ -113,7 +116,7 @@ class TodoItemsViewModel(application: Application) : AndroidViewModel(applicatio
                     result = repository.refreshItems()
                 } else return@repeat
             }
-            result
+            _lastRefreshStatus = result
         }
     }
 

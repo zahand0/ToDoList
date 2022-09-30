@@ -1,4 +1,4 @@
-package com.example.todolist.ui
+package com.example.todolist.ui.view
 
 import android.graphics.Color
 import android.graphics.Paint
