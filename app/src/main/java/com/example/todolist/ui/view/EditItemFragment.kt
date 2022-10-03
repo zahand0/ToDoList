@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
+import com.example.todolist.TodoListApplication
 import com.example.todolist.data.CommonDateFormats
 import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
@@ -42,7 +43,12 @@ class EditItemFragment : Fragment() {
         }
         ViewModelProvider(
             this,
-            TodoItemViewModelFactory(activity.application)
+            TodoItemViewModelFactory(
+                activity.application,
+                (activity.application as TodoListApplication)
+                    .getRepositoryComponent()
+                    .getRepository()
+            )
         )[TodoItemsViewModel::class.java]
     }
 

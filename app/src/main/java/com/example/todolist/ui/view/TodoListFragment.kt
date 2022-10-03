@@ -3,7 +3,6 @@ package com.example.todolist.ui.view
 import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
+import com.example.todolist.TodoListApplication
 import com.example.todolist.data.SettingsDataStore
 import com.example.todolist.databinding.FragmentTodoListBinding
 import com.example.todolist.network.exception.NetworkState
@@ -53,7 +53,12 @@ class TodoListFragment : Fragment() {
         }
         ViewModelProvider(
             this,
-            TodoItemViewModelFactory(activity.application)
+            TodoItemViewModelFactory(
+                activity.application,
+                (activity.application as TodoListApplication)
+                    .getRepositoryComponent()
+                    .getRepository()
+            )
         )[TodoItemsViewModel::class.java]
     }
 
