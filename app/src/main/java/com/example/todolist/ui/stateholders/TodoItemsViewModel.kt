@@ -3,6 +3,7 @@ package com.example.todolist.ui.stateholders
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
@@ -14,8 +15,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 
-class TodoItemsViewModel(application: Application, private val repository: TodoItemsRepository) :
-    AndroidViewModel(application) {
+class TodoItemsViewModel(private val repository: TodoItemsRepository) :
+    ViewModel() {
 
     val allItems: Flow<List<TodoItem>> =
         repository.todoItems

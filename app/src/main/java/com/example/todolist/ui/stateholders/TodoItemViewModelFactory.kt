@@ -6,13 +6,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.todolist.repository.TodoItemsRepository
 
 class TodoItemViewModelFactory(
-    val app: Application,
     val repository: TodoItemsRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TodoItemsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return TodoItemsViewModel(app, repository) as T
+            return TodoItemsViewModel(repository) as T
         }
         throw IllegalArgumentException("Unable to construct viewmodel")
     }

@@ -54,7 +54,6 @@ class TodoListFragment : Fragment() {
         ViewModelProvider(
             this,
             TodoItemViewModelFactory(
-                activity.application,
                 (activity.application as TodoListApplication)
                     .getRepositoryComponent()
                     .getRepository()
