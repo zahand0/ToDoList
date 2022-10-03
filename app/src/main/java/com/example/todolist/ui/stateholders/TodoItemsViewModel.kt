@@ -6,7 +6,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TodoItem
-import com.example.todolist.data.database.ItemDatabase
 import com.example.todolist.network.exception.NetworkState
 import com.example.todolist.repository.TodoItemsRepository
 import kotlinx.coroutines.*
@@ -15,10 +14,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 
-class TodoItemsViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = TodoItemsRepository(ItemDatabase.getDatabase(application))
-
+class TodoItemsViewModel(application: Application, private val repository: TodoItemsRepository) :
+    AndroidViewModel(application) {
 
     val allItems: Flow<List<TodoItem>> =
         repository.todoItems
