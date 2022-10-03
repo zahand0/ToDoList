@@ -5,7 +5,7 @@ import com.example.todolist.data.TodoItem
 import com.example.todolist.data.asNetworkItem
 import com.example.todolist.data.database.ItemDatabase
 import com.example.todolist.network.NetworkItemContainer
-import com.example.todolist.network.api.TodoListApi.api
+import com.example.todolist.network.api.RetrofitClient
 import com.example.todolist.network.asDatabaseModel
 import com.example.todolist.network.exception.NetworkState
 import kotlinx.coroutines.Dispatchers
@@ -14,9 +14,16 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import okio.IOException
 import retrofit2.HttpException
+import javax.inject.Inject
 
-private const val TAG = "Repository"
-class TodoItemsRepository(private val database: ItemDatabase) {
+class TodoItemsRepository @Inject constructor(
+    private val database: ItemDatabase,
+    private val retrofitClient: RetrofitClient
+) {
+
+    companion object {
+        private const val TAG = "Repository"
+    }
 
     private val dao = database.itemDao()
 
@@ -61,7 +68,7 @@ class TodoItemsRepository(private val database: ItemDatabase) {
         withContext(Dispatchers.IO) {
 
             val taskList = todoItems.first().map { it.asNetworkItem() }
-            api.updateTaskList(NetworkItemContainer(taskList))
+            retrofitClient.getServices().updateTaskList(NetworkItemContainer(taskList))
                 .onSuccess {
                     for (task in it.asDatabaseModel()) {
                         updateItem(task)

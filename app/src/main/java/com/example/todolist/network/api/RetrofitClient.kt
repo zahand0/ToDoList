@@ -1,10 +1,13 @@
 package com.example.todolist.network.api
 
+import com.example.todolist.di.AppScope
 import com.example.todolist.network.exception.ResultCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
 
-class TodoListApi {
+@AppScope
+class RetrofitClient @Inject constructor() {
 
     companion object {
         private const val BASE_URL = "http://10.0.2.2:5000/"
@@ -13,7 +16,7 @@ class TodoListApi {
     }
 
     private var retrofit: Retrofit? = null
-    private var api: TodoListApiService? = null
+    private var retrofitServices: RetrofitServices? = null
 
     private fun getClient(): Retrofit {
         if (retrofit == null) {
@@ -26,10 +29,10 @@ class TodoListApi {
         return retrofit!!
     }
 
-    fun getApi(): TodoListApiService {
-        if (api == null) {
-            api = getClient().create(TodoListApiService::class.java)
+    fun getServices(): RetrofitServices {
+        if (retrofitServices == null) {
+            retrofitServices = getClient().create(RetrofitServices::class.java)
         }
-        return api!!
+        return retrofitServices!!
     }
 }

@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.todolist.data.TodoItem
 import com.example.todolist.data.dao.ItemDao
+import javax.inject.Inject
 
 @Database(entities = [TodoItem::class], version = 1, exportSchema = false)
 abstract class ItemDatabase: RoomDatabase() {
