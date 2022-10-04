@@ -1,9 +1,9 @@
 package com.example.todolist.repository
 
 import android.util.Log
-import com.example.todolist.data.TodoItem
+import com.example.todolist.data.TaskModel
 import com.example.todolist.data.asNetworkItem
-import com.example.todolist.data.database.ItemDatabase
+import com.example.todolist.data.database.TaskDatabase
 import com.example.todolist.network.NetworkItemContainer
 import com.example.todolist.network.api.RetrofitClient
 import com.example.todolist.network.asDatabaseModel
@@ -17,7 +17,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class TodoItemsRepository @Inject constructor(
-    private val database: ItemDatabase,
+    private val database: TaskDatabase,
     private val retrofitClient: RetrofitClient
 ) {
 
@@ -27,16 +27,16 @@ class TodoItemsRepository @Inject constructor(
 
     private val dao = database.itemDao()
 
-    val todoItems: Flow<List<TodoItem>> = dao.getItems()
-    val todoItemsUndone: Flow<List<TodoItem>> = dao.getUndoneItems()
+    val todoItems: Flow<List<TaskModel>> = dao.getItems()
+    val todoItemsUndone: Flow<List<TaskModel>> = dao.getUndoneItems()
 
-    suspend fun addItem(item: TodoItem) {
+    suspend fun addItem(item: TaskModel) {
         withContext(Dispatchers.IO) {
             dao.insert(item)
         }
     }
 
-    suspend fun retrieveItem(id: Int): Flow<TodoItem>? {
+    suspend fun retrieveItem(id: Int): Flow<TaskModel>? {
         return withContext(Dispatchers.IO) {
             val res = dao.getItem(id)
             Log.d("repository", "comleted res")
@@ -44,7 +44,7 @@ class TodoItemsRepository @Inject constructor(
         }
     }
 
-    suspend fun updateItem(item: TodoItem) {
+    suspend fun updateItem(item: TaskModel) {
         withContext(Dispatchers.IO) {
             dao.update(item)
         }

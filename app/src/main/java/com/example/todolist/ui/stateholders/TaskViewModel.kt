@@ -1,27 +1,25 @@
 package com.example.todolist.ui.stateholders
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.data.TaskPriority
-import com.example.todolist.data.TodoItem
+import com.example.todolist.data.TaskModel
 import com.example.todolist.network.exception.NetworkState
-import com.example.todolist.repository.TodoItemsRepository
+import com.example.todolist.repository.TaskRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 
-class TodoItemsViewModel(private val repository: TodoItemsRepository) :
+class TodoItemsViewModel(private val repository: TaskRepository) :
     ViewModel() {
 
-    val allItems: Flow<List<TodoItem>> =
+    val allItems: Flow<List<TaskModel>> =
         repository.todoItems
 
-    val undoneItems: Flow<List<TodoItem>> =
+    val undoneItems: Flow<List<TaskModel>> =
         repository.todoItemsUndone
 
     private val _doneTasks = getDoneTasksCount().stateIn(viewModelScope, SharingStarted.Lazily, 0)
@@ -40,7 +38,7 @@ class TodoItemsViewModel(private val repository: TodoItemsRepository) :
         editDate: Long
     ) {
 
-        val item = TodoItem(
+        val item = TaskModel(
             0,
             description,
             priority,
@@ -56,7 +54,7 @@ class TodoItemsViewModel(private val repository: TodoItemsRepository) :
 
     }
 
-    fun retrieveItem(id: Int): TodoItem? {
+    fun retrieveItem(id: Int): TaskModel? {
         return runBlocking(Dispatchers.IO) {
             Log.d("repoViewModel", "call retrieveItem")
             val res = repository.retrieveItem(id)
@@ -74,7 +72,7 @@ class TodoItemsViewModel(private val repository: TodoItemsRepository) :
         creationDate: Long,
         editDate: Long
     ) {
-        val item = TodoItem(
+        val item = TaskModel(
             id,
             description,
             priority,
@@ -88,13 +86,13 @@ class TodoItemsViewModel(private val repository: TodoItemsRepository) :
         }
     }
 
-    fun updateItem(item: TodoItem) {
+    fun updateItem(item: TaskModel) {
         viewModelScope.launch {
             repository.updateItem(item)
         }
     }
 
-    fun changeStatus(item: TodoItem, status: Boolean) {
+    fun changeStatus(item: TaskModel, status: Boolean) {
         val newItem = item.copy(isDone = status)
         updateItem(newItem)
     }

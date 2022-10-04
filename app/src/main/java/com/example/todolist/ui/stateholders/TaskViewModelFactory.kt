@@ -1,12 +1,11 @@
 package com.example.todolist.ui.stateholders
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.todolist.repository.TodoItemsRepository
+import com.example.todolist.repository.TaskRepository
 
 class TodoItemViewModelFactory(
-    val repository: TodoItemsRepository
+    val repository: TaskRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TodoItemsViewModel::class.java)) {

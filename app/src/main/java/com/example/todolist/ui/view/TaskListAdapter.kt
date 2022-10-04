@@ -13,14 +13,14 @@ import com.example.todolist.R
 import com.example.todolist.data.CommonDateFormats
 import com.example.todolist.data.CommonDateFormats.msecToDate
 import com.example.todolist.data.TaskPriority
-import com.example.todolist.data.TodoItem
+import com.example.todolist.data.TaskModel
 import com.example.todolist.databinding.TodoItemBinding
 import java.lang.ref.WeakReference
 
-class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
-    ListAdapter<TodoItem, TodoListAdapter.ItemViewHolder>(DiffCallBack) {
+class TodoListAdapter(private val onItemClicked: (TaskModel) -> Unit) :
+    ListAdapter<TaskModel, TodoListAdapter.ItemViewHolder>(DiffCallBack) {
 
-    var onCheckDoneClick: ((TodoItem, Boolean) -> Unit)? = null
+    var onCheckDoneClick: ((TaskModel, Boolean) -> Unit)? = null
     var onDeleteClick: ((Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -46,7 +46,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
 
         var onDeleteClick: ((Int) -> Unit)? = null
 
-        var onCheckDoneClick: ((TodoItem, Boolean) -> Unit)? = null
+        var onCheckDoneClick: ((TaskModel, Boolean) -> Unit)? = null
 
         init {
             view.get()?.let {
@@ -64,7 +64,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
 
         }
 
-        fun bind(item: TodoItem) {
+        fun bind(item: TaskModel) {
 
             binding.taskDescription.text = item.description
             setDeadlineDate(item.deadlineDate)
@@ -112,7 +112,7 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
             }
         }
 
-        private fun changeStatus(item: TodoItem, isDone: Boolean) {
+        private fun changeStatus(item: TaskModel, isDone: Boolean) {
             onCheckDoneClick?.let { it(item, isDone) }
         }
 
@@ -144,12 +144,12 @@ class TodoListAdapter(private val onItemClicked: (TodoItem) -> Unit) :
     }
 
     companion object {
-        private val DiffCallBack = object : DiffUtil.ItemCallback<TodoItem>() {
-            override fun areItemsTheSame(oldItem: TodoItem, newItem: TodoItem): Boolean {
+        private val DiffCallBack = object : DiffUtil.ItemCallback<TaskModel>() {
+            override fun areItemsTheSame(oldItem: TaskModel, newItem: TaskModel): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: TodoItem, newItem: TodoItem): Boolean {
+            override fun areContentsTheSame(oldItem: TaskModel, newItem: TaskModel): Boolean {
                 return oldItem.description == newItem.description &&
                         oldItem.isDone == newItem.isDone &&
                         oldItem.deadlineDate == newItem.deadlineDate &&
