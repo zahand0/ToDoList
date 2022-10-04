@@ -94,13 +94,9 @@ class EditItemFragment : Fragment() {
         binding?.delete?.isEnabled = !isNewTask
 
         binding?.delete?.setOnClickListener {
-            Log.d(TAG, "before")
             val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
-            Log.d(TAG, "right before")
             deleteItem(item.id)
-            Log.d(TAG, "right after")
             this@EditItemFragment.findNavController().navigate(action)
-            Log.d(TAG, "after")
         }
 
     }
