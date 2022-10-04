@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 
-class TodoItemsViewModel(private val repository: TaskRepository) :
+class TaskViewModel(private val repository: TaskRepository) :
     ViewModel() {
 
     val allItems: Flow<List<TaskModel>> =
-        repository.todoItems
+        repository.taskItems
 
     val undoneItems: Flow<List<TaskModel>> =
-        repository.todoItemsUndone
+        repository.taskItemsUndone
 
     private val _doneTasks = getDoneTasksCount().stateIn(viewModelScope, SharingStarted.Lazily, 0)
     val doneTasks = _doneTasks

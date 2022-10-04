@@ -21,23 +21,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.TodoListApplication
 import com.example.todolist.data.SettingsDataStore
-import com.example.todolist.databinding.FragmentTodoListBinding
+import com.example.todolist.databinding.FragmentTaskListBinding
 import com.example.todolist.network.exception.NetworkState
-import com.example.todolist.ui.stateholders.TodoItemViewModelFactory
-import com.example.todolist.ui.stateholders.TodoItemsViewModel
+import com.example.todolist.ui.stateholders.TaskViewModel
+import com.example.todolist.ui.stateholders.TaskViewModelFactory
 import com.example.todolist.ui.utils.ItemTouchHelperCallback
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class TodoListFragment : Fragment() {
+class TaskListFragment : Fragment() {
 
     companion object {
-        private const val TAG = "TodoListFragment"
+        private const val TAG = "TaskListFragment"
     }
 
-    private var binding: FragmentTodoListBinding? = null
+    private var binding: FragmentTaskListBinding? = null
 
     private var showDoneTasks = true
 
@@ -45,20 +45,20 @@ class TodoListFragment : Fragment() {
         SettingsDataStore(requireContext())
     }
 
-    private val args: TodoListFragmentArgs by navArgs()
+    private val args: TaskListFragmentArgs by navArgs()
 
-    private val viewModel: TodoItemsViewModel by lazy {
+    private val viewModel: TaskViewModel by lazy {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
         ViewModelProvider(
             this,
-            TodoItemViewModelFactory(
+            TaskViewModelFactory(
                 (activity.application as TodoListApplication)
                     .getRepositoryComponent()
                     .getRepository()
             )
-        )[TodoItemsViewModel::class.java]
+        )[TaskViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -66,7 +66,7 @@ class TodoListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val fragmentBinding = FragmentTodoListBinding.inflate(inflater, container, false)
+        val fragmentBinding = FragmentTaskListBinding.inflate(inflater, container, false)
         binding = fragmentBinding
         return fragmentBinding.root
     }
@@ -74,7 +74,7 @@ class TodoListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = TodoListAdapter {
+        val adapter = TaskListAdapter {
             navigateToEditItemFragment(it.id)
         }
         adapter.onCheckDoneClick = viewModel::changeStatus
@@ -123,12 +123,12 @@ class TodoListFragment : Fragment() {
 
         // if created new task scroll to bottom of fragment
         if (args.scrollAllWayDown) {
-            binding?.todoListNestedScrollView?.postDelayed(
+            binding?.taskListNestedScrollView?.postDelayed(
                 {
                     if (!isVisible(binding?.newTaskTextview)) {
                         binding?.appBarLayout?.setExpanded(false)
                     }
-                    binding?.todoListNestedScrollView?.fullScroll(View.FOCUS_DOWN)
+                    binding?.taskListNestedScrollView?.fullScroll(View.FOCUS_DOWN)
                 },
                 200
             )
@@ -168,7 +168,7 @@ class TodoListFragment : Fragment() {
 
     private fun navigateToEditItemFragment(itemId: Int) {
         val action =
-            TodoListFragmentDirections.actionTodoListFragmentToEditItemFragment(itemId)
+            TaskListFragmentDirections.actionTaskListFragmentToEditItemFragment(itemId)
         this.findNavController().navigate(action)
     }
 
@@ -192,7 +192,7 @@ class TodoListFragment : Fragment() {
 
     // show all tasks or only undone tasks
     private fun chooseTaskList() {
-        val adapter = binding?.recyclerView?.adapter as TodoListAdapter
+        val adapter = binding?.recyclerView?.adapter as TaskListAdapter
         viewModel.allItems
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .onEach {

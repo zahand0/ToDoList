@@ -16,7 +16,7 @@ import okio.IOException
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class TodoItemsRepository @Inject constructor(
+class TaskRepository @Inject constructor(
     private val database: TaskDatabase,
     private val retrofitClient: RetrofitClient
 ) {
@@ -25,10 +25,10 @@ class TodoItemsRepository @Inject constructor(
         private const val TAG = "Repository"
     }
 
-    private val dao = database.itemDao()
+    private val dao = database.taskDao()
 
-    val todoItems: Flow<List<TaskModel>> = dao.getItems()
-    val todoItemsUndone: Flow<List<TaskModel>> = dao.getUndoneItems()
+    val taskItems: Flow<List<TaskModel>> = dao.getItems()
+    val taskItemsUndone: Flow<List<TaskModel>> = dao.getUndoneItems()
 
     suspend fun addItem(item: TaskModel) {
         withContext(Dispatchers.IO) {
@@ -67,7 +67,7 @@ class TodoItemsRepository @Inject constructor(
         var error = "ok"
         withContext(Dispatchers.IO) {
 
-            val taskList = todoItems.first().map { it.asNetworkItem() }
+            val taskList = taskItems.first().map { it.asNetworkItem() }
             retrofitClient.getServices().updateTaskList(NetworkItemContainer(taskList))
                 .onSuccess {
                     for (task in it.asDatabaseModel()) {

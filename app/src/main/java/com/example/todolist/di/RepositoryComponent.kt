@@ -1,7 +1,7 @@
 package com.example.todolist.di
 
 import android.content.Context
-import com.example.todolist.repository.TodoItemsRepository
+import com.example.todolist.repository.TaskRepository
 import dagger.BindsInstance
 import dagger.Component
 
@@ -9,7 +9,7 @@ import dagger.Component
 @Component(modules = [DatabaseModule::class])
 interface RepositoryComponent {
 
-    fun getRepository(): TodoItemsRepository
+    fun getRepository(): TaskRepository
 
     @Component.Factory
     interface Factory {

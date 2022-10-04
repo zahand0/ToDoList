@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.example.todolist.network.NetworkItem
 
 @Entity(tableName = "item")
-data class TodoItem(
+data class TaskModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     @ColumnInfo(name = "description")
@@ -23,7 +23,7 @@ data class TodoItem(
     val lastEditDate: Long
 )
 
-fun TodoItem.asNetworkItem(): NetworkItem {
+fun TaskModel.asNetworkItem(): NetworkItem {
     return NetworkItem(
         id = this.id,
         description = this.description,

@@ -20,10 +20,10 @@ import com.example.todolist.R
 import com.example.todolist.TodoListApplication
 import com.example.todolist.data.CommonDateFormats
 import com.example.todolist.data.TaskPriority
-import com.example.todolist.data.TodoItem
+import com.example.todolist.data.TaskModel
 import com.example.todolist.databinding.FragmentEditItemBinding
-import com.example.todolist.ui.stateholders.TodoItemViewModelFactory
-import com.example.todolist.ui.stateholders.TodoItemsViewModel
+import com.example.todolist.ui.stateholders.TaskViewModelFactory
+import com.example.todolist.ui.stateholders.TaskViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,18 +37,18 @@ class EditItemFragment : Fragment() {
 
     private var binding: FragmentEditItemBinding? = null
 
-    private val viewModel: TodoItemsViewModel by lazy {
+    private val viewModel: TaskViewModel by lazy {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
         ViewModelProvider(
             this,
-            TodoItemViewModelFactory(
+            TaskViewModelFactory(
                 (activity.application as TodoListApplication)
                     .getRepositoryComponent()
                     .getRepository()
             )
-        )[TodoItemsViewModel::class.java]
+        )[TaskViewModel::class.java]
     }
 
     private val args: EditItemFragmentArgs by navArgs()
@@ -56,7 +56,7 @@ class EditItemFragment : Fragment() {
     private val isNewTask
         get() = args.itemId == -1
 
-    private lateinit var item: TodoItem
+    private lateinit var item: TaskModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,14 +87,14 @@ class EditItemFragment : Fragment() {
         }
 
         binding?.topAppBar?.setNavigationOnClickListener {
-            val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
+            val action = EditItemFragmentDirections.actionEditItemFragmentToTaskListFragment()
             this.findNavController().navigate(action)
         }
 
         binding?.delete?.isEnabled = !isNewTask
 
         binding?.delete?.setOnClickListener {
-            val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
+            val action = EditItemFragmentDirections.actionEditItemFragmentToTaskListFragment()
             deleteItem(item.id)
             this@EditItemFragment.findNavController().navigate(action)
         }
@@ -127,7 +127,7 @@ class EditItemFragment : Fragment() {
                     Calendar.getInstance().timeInMillis
                 )
             }
-            val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment(true)
+            val action = EditItemFragmentDirections.actionEditItemFragmentToTaskListFragment(true)
             this.findNavController().navigate(action)
         }
 
@@ -200,11 +200,11 @@ class EditItemFragment : Fragment() {
                 Calendar.getInstance().timeInMillis
             )
         }
-        val action = EditItemFragmentDirections.actionEditItemFragmentToTodoListFragment()
+        val action = EditItemFragmentDirections.actionEditItemFragmentToTaskListFragment()
         this.findNavController().navigate(action)
     }
 
-    private fun bind(itemToDisplay: TodoItem) {
+    private fun bind(itemToDisplay: TaskModel) {
         binding?.apply {
             description.setText(itemToDisplay.description)
             priority.setSelection(setTaskPriority(itemToDisplay.priority))
@@ -224,7 +224,7 @@ class EditItemFragment : Fragment() {
     }
 
     private fun deleteItem(itemId: Int) {
-        item = TodoItem(0, "", TaskPriority.NORMAL, false, null, 0, 0)
+        item = TaskModel(0, "", TaskPriority.NORMAL, false, null, 0, 0)
         viewModel.deleteItem(itemId)
     }
 
@@ -244,11 +244,11 @@ class EditItemFragment : Fragment() {
             // on below line we are passing context.
             requireContext(),
             R.style.MyDatePickerStyle,
-            { view, year, monthOfYear, dayOfMonth ->
+            { _, yearNumber, monthOfYear, dayOfMonth ->
                 // on below line we are setting
                 // date to our edit text.
                 val formatter = SimpleDateFormat(CommonDateFormats.DIGIT_DATE)
-                val dat = formatter.parse("$dayOfMonth.${monthOfYear + 1}.$year")?.time
+                val dat = formatter.parse("$dayOfMonth.${monthOfYear + 1}.$yearNumber")?.time
                 dat?.let {
                     binding?.pickedDate?.text =
                         CommonDateFormats.msecToDate(it, CommonDateFormats.SHORT_DATE)

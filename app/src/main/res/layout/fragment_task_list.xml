@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/back_primary"
-    tools:context=".ui.view.TodoListFragment">
+    tools:context=".ui.view.TaskListFragment">
 
 
     <com.google.android.material.appbar.AppBarLayout
@@ -94,7 +94,7 @@
             android:layout_height="match_parent">
 
             <androidx.core.widget.NestedScrollView
-                android:id="@+id/todo_list_nested_scroll_view"
+                android:id="@+id/task_list_nested_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -110,7 +110,7 @@
                         android:layout_height="wrap_content"
 
                         tools:itemCount="2"
-                        tools:listitem="@layout/todo_item" />
+                        tools:listitem="@layout/task_item" />
 
                     <TextView
                         android:id="@+id/new_task_textview"

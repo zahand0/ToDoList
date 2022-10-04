@@ -14,18 +14,18 @@ import com.example.todolist.data.CommonDateFormats
 import com.example.todolist.data.CommonDateFormats.msecToDate
 import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TaskModel
-import com.example.todolist.databinding.TodoItemBinding
+import com.example.todolist.databinding.TaskItemBinding
 import java.lang.ref.WeakReference
 
-class TodoListAdapter(private val onItemClicked: (TaskModel) -> Unit) :
-    ListAdapter<TaskModel, TodoListAdapter.ItemViewHolder>(DiffCallBack) {
+class TaskListAdapter(private val onItemClicked: (TaskModel) -> Unit) :
+    ListAdapter<TaskModel, TaskListAdapter.ItemViewHolder>(DiffCallBack) {
 
     var onCheckDoneClick: ((TaskModel, Boolean) -> Unit)? = null
     var onDeleteClick: ((Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
-            TodoItemBinding.inflate(LayoutInflater.from(parent.context))
+            TaskItemBinding.inflate(LayoutInflater.from(parent.context))
         )
     }
 
@@ -39,7 +39,7 @@ class TodoListAdapter(private val onItemClicked: (TaskModel) -> Unit) :
         holder.bind(current)
     }
 
-    class ItemViewHolder(private val binding: TodoItemBinding) :
+    class ItemViewHolder(private val binding: TaskItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         private val view = WeakReference(binding.root)
@@ -53,13 +53,6 @@ class TodoListAdapter(private val onItemClicked: (TaskModel) -> Unit) :
                 if (it.scrollX != 0) {
                     it.scrollTo(0, 0)
                 }
-                binding.checkDone.setOnClickListener {
-                    onCheckDoneClick?.let { onCheckDoneClick ->
-//                        onCheckDoneClick(this)
-                    }
-
-                }
-
             }
 
         }
@@ -71,7 +64,7 @@ class TodoListAdapter(private val onItemClicked: (TaskModel) -> Unit) :
             setImportance(item.priority)
             Log.d("adapter", "bind call")
 
-            binding.taskStatus.setOnCheckedChangeListener { compoundButton, b ->
+            binding.taskStatus.setOnCheckedChangeListener { _, b ->
                 changeStatus(item, b)
             }
             binding.checkDone.setOnClickListener {

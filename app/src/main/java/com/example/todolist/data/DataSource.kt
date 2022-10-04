@@ -7,7 +7,7 @@ object DataSource {
 
     val todoItems = MutableStateFlow(
         mutableListOf(
-            TodoItem(
+            TaskModel(
                 1,
                 "Вернуться из Армии",
                 TaskPriority.NORMAL,
@@ -16,7 +16,7 @@ object DataSource {
                 1625432400000,
                 1657314000000
             ),
-            TodoItem(
+            TaskModel(
                 2,
                 "My name is Yoshikage Kira. I’m 33 years old. My house is in the northeast section of Morioh, where all the villas are, and I am not married. I work as an employee for the Kame Yu department stores, and I get home every day by 8 PM at the latest.",
                 TaskPriority.LOW,
@@ -25,7 +25,7 @@ object DataSource {
                 1657314000000,
                 1657314000000
             ),
-            TodoItem(
+            TaskModel(
                 3,
                 "Доделать приложение",
                 TaskPriority.NORMAL,
@@ -34,7 +34,7 @@ object DataSource {
                 1661806800000,
                 1661806800000
             ),
-            TodoItem(
+            TaskModel(
                 4,
                 "Buy some berries",
                 TaskPriority.NORMAL,
@@ -43,7 +43,7 @@ object DataSource {
                 1661806800000,
                 1661806800000
             ),
-            TodoItem(
+            TaskModel(
                 5,
                 "Celebrate Day of Knowledge",
                 TaskPriority.LOW,
@@ -52,7 +52,7 @@ object DataSource {
                 1661806800000,
                 1661806800000
             ),
-            TodoItem(
+            TaskModel(
                 6,
                 "Найти работу",
                 TaskPriority.URGENT,
@@ -61,7 +61,7 @@ object DataSource {
                 1661806800000,
                 1661806800000
             ),
-            TodoItem(
+            TaskModel(
                 7,
                 "Buy 12 Bananas",
                 TaskPriority.LOW,
@@ -70,7 +70,7 @@ object DataSource {
                 1661806800000,
                 1661806800000
             ),
-            TodoItem(
+            TaskModel(
                 8,
                 "Go to park.",
                 TaskPriority.NORMAL,
@@ -79,7 +79,7 @@ object DataSource {
                 1661806800000,
                 1661806800000
             ),
-            TodoItem(
+            TaskModel(
                 9,
                 "Выжить",
                 TaskPriority.URGENT,
@@ -88,7 +88,7 @@ object DataSource {
                 1661806800000,
                 1657314000000
             ),
-            TodoItem(
+            TaskModel(
                 10,
                 "Play some games with new fancy wired gamepad with xbox logo on it",
                 TaskPriority.LOW,
@@ -102,19 +102,19 @@ object DataSource {
 
     private var maxId = 10
 
-    fun addItem(item: TodoItem) {
+    fun addItem(item: TaskModel) {
         maxId += 1
         val list = todoItems.value.toMutableList()
         list.add(item.copy(id = maxId))
         todoItems.value = list
     }
 
-    fun retrieveItem(id: Int): StateFlow<TodoItem>? {
+    fun retrieveItem(id: Int): StateFlow<TaskModel>? {
         val item = todoItems.value.firstOrNull { it.id == id }
         return if (item == null) null else MutableStateFlow(item)
     }
 
-    fun updateItem(item: TodoItem) {
+    fun updateItem(item: TaskModel) {
         val list = todoItems.value.toMutableList()
         val updateItemIndex = list.indexOfFirst { it.id == item.id }
         if (updateItemIndex == -1) {

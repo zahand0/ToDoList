@@ -1,8 +1,6 @@
 package com.example.todolist
 
 import android.app.Application
-import com.example.todolist.data.database.ItemDatabase
-import com.example.todolist.di.AppComponent
 import com.example.todolist.di.DaggerRepositoryComponent
 import com.example.todolist.di.RepositoryComponent
 
