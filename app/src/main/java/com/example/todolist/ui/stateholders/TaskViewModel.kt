@@ -17,7 +17,7 @@ class TaskViewModel(private val repository: TaskRepository) :
     ViewModel() {
 
     val allItems: Flow<List<TaskModel>> =
-        repository.taskItems
+        repository.getTaskItems()
 
     private val _doneTasks = getDoneTasksCount().stateIn(viewModelScope, SharingStarted.Lazily, 0)
     val doneTasks = _doneTasks
