@@ -1,6 +1,7 @@
 package com.example.todolist.di
 
 import android.content.Context
+import com.example.todolist.data.dao.TaskDao
 import com.example.todolist.data.database.TaskDatabase
 import dagger.Module
 import dagger.Provides
@@ -12,8 +13,8 @@ class DatabaseModule {
     companion object {
         @AppScope
         @Provides
-        fun provideDatabase(context: Context): TaskDatabase {
-            return TaskDatabase.getDatabase(context)
+        fun provideDao(context: Context): TaskDao {
+            return TaskDatabase.getDatabase(context).taskDao()
         }
     }
 }
