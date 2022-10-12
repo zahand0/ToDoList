@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.data.CommonDateFormats
 import com.example.todolist.data.CommonDateFormats.msecToDate
-import com.example.todolist.data.TaskPriority
 import com.example.todolist.data.TaskModel
+import com.example.todolist.data.TaskPriority
 import com.example.todolist.databinding.TaskItemBinding
 import java.lang.ref.WeakReference
 
@@ -68,7 +68,7 @@ class TaskListAdapter(private val onItemClicked: (TaskModel) -> Unit) :
                 changeStatus(item, b)
             }
             binding.checkDone.setOnClickListener {
-                changeStatus(item, true)
+                binding.taskStatus.isChecked = true
             }
             setCheckStatus(item.isDone)
 
@@ -143,8 +143,8 @@ class TaskListAdapter(private val onItemClicked: (TaskModel) -> Unit) :
             }
 
             override fun areContentsTheSame(oldItem: TaskModel, newItem: TaskModel): Boolean {
-                return oldItem.description == newItem.description &&
-                        oldItem.isDone == newItem.isDone &&
+                return oldItem.id == newItem.id &&
+                        oldItem.description == newItem.description &&
                         oldItem.deadlineDate == newItem.deadlineDate &&
                         oldItem.priority == newItem.priority
             }
