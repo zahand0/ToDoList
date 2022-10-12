@@ -28,7 +28,6 @@ class TaskRepository @Inject constructor(
     private val dao = database.taskDao()
 
     val taskItems: Flow<List<TaskModel>> = dao.getItems()
-    val taskItemsUndone: Flow<List<TaskModel>> = dao.getUndoneItems()
 
     suspend fun addItem(item: TaskModel) {
         withContext(Dispatchers.IO) {

@@ -22,9 +22,6 @@ interface TaskDao {
     @Query("SELECT * FROM item ORDER BY creation_date ASC")
     fun getItems(): Flow<List<TaskModel>>
 
-    @Query("SELECT * FROM item WHERE is_done = 0 ORDER BY creation_date ASC")
-    fun getUndoneItems(): Flow<List<TaskModel>>
-
     @Query("SELECT COUNT(*) FROM item WHERE is_done = 1")
     fun getNumberDoneItems(): Flow<Int>
 }

@@ -19,9 +19,6 @@ class TaskViewModel(private val repository: TaskRepository) :
     val allItems: Flow<List<TaskModel>> =
         repository.taskItems
 
-    val undoneItems: Flow<List<TaskModel>> =
-        repository.taskItemsUndone
-
     private val _doneTasks = getDoneTasksCount().stateIn(viewModelScope, SharingStarted.Lazily, 0)
     val doneTasks = _doneTasks
 
