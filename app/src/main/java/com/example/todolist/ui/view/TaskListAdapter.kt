@@ -145,6 +145,7 @@ class TaskListAdapter(private val onItemClicked: (TaskModel) -> Unit) :
             override fun areContentsTheSame(oldItem: TaskModel, newItem: TaskModel): Boolean {
                 return oldItem.id == newItem.id &&
                         oldItem.description == newItem.description &&
+                        oldItem.isDone == newItem.isDone &&
                         oldItem.deadlineDate == newItem.deadlineDate &&
                         oldItem.priority == newItem.priority
             }
