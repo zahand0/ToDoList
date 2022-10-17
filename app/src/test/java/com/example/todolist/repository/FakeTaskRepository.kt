@@ -2,15 +2,16 @@ package com.example.todolist.repository
 
 import com.example.todolist.data.TaskModel
 import com.example.todolist.network.exception.NetworkState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 
 class FakeTaskRepository : TaskRepository {
 
     private val taskItems = mutableListOf<TaskModel>()
 
-    private val taskItemsFlow = MutableStateFlow(taskItems)
+    private var taskItemsFlow = Channel<List<TaskModel>>()
+
+    private var doneTaskFlow = Channel<Int>()
 
     private var networkState = NetworkState.OK
 
@@ -18,12 +19,12 @@ class FakeTaskRepository : TaskRepository {
         networkState = value
     }
 
-    private fun updateFlow() {
-        taskItemsFlow.value = taskItems
+    private suspend fun updateFlow() {
+        taskItemsFlow.send(taskItems)
     }
 
     override fun getTaskItems(): Flow<List<TaskModel>> {
-        return taskItemsFlow
+        return taskItemsFlow.consumeAsFlow()
     }
 
     override suspend fun addItem(item: TaskModel) {
@@ -50,7 +51,7 @@ class FakeTaskRepository : TaskRepository {
     }
 
     override suspend fun getNumberDoneItems(): Flow<Int> {
-        return flow { emit(taskItems.count { it.isDone }) }
+        return doneTaskFlow.consumeAsFlow()
     }
 
     override suspend fun refreshItems(): NetworkState {
