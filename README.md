@@ -2,7 +2,7 @@
 
 ## Application for task tracking.
 
-### Currently implemented:
+### Used libraries: Room, Retrofit, Coroutines, Dagger2, Moshi, JUnit4
 
 <table>
  <tr>
